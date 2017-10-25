@@ -33,7 +33,7 @@ public class Cliente{
 			packet = new DatagramPacket(data, data.length, address, Integer.parseInt(puerto));//, address, ServidorCentral.serverPort);
 			socket.send(packet);
 
-			data = new byte[ServidorCentral.packetSize];
+			data = new byte[1024];
 			packet = new DatagramPacket(data, data.length);
 			socket.receive(packet);
 

@@ -42,6 +42,8 @@ public class ServidorCentral{
 					// Obtener datos del cliente para realizar eco
 					clientAddr = packet.getAddress();
 					clientPort = packet.getPort();
+					System.out.println(clientPort);
+					System.out.println("2.-NO");
 					msg = new String(data, 0, packet.getLength(), "UTF-8"); // nombre distrito
 
 					Iterator<Servidor>itr = zonas.iterator();
@@ -57,7 +59,7 @@ public class ServidorCentral{
 							System.out.println("NOTA: Debes contestar la pregunta anterior, antes de dar autorizacion");
 							System.out.println("1.-SI");	
 							System.out.println("2.-NO");
-							menu.dormir();
+							//menu.dormir();
 							Scanner input_op = new Scanner(System.in);
 							//menu = new ThreadMenu(zonas);
 							String reply;
