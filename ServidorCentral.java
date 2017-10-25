@@ -5,19 +5,47 @@ import java.util.*;
 public class ServidorCentral{
 
 	static final int serverPort = 5000;
-	static final int packetSize = 1024;  
+	static final int packetSize = 1024; 
 
-    public static void main (String [] args) throws InterruptedException{ 
-    	ArrayList <Servidor> zonas = new ArrayList <Servidor> ();
-	    DatagramPacket packet;
+	public static void main (String [] args){
+
+		ArrayList<Servidor> lista = new ArrayList<Servidor>();
+
+		DatagramPacket packet;
 		DatagramSocket socket;
 
 		byte[] data; // Para datos a ser enviados en paquetes
 		int clientPort;
 		InetAddress clientAddr;
-		String msg;    	
-		ThreadMenu menu = new ThreadMenu(zonas); 
-		menu.start(); 
+		String mensaje;
+
+		Scanner input = new Scanner(System.in);
+
+		for (int i=1; i<=4; i++){
+			//Scanner input = new Scanner(System.in);
+	        System.out.println("*****************************************");
+	   		System.out.println("AGREGAR DISTRITO");
+	   		System.out.println("[Servidor Central]: Nombre Distrito:");
+	   		String ns_zone = input.nextLine();
+	   		System.out.println("[Servidor Central]: IP Multicast:");
+	   		String ip_multi = input.nextLine();
+	   		System.out.println("[Servidor Central]: IP Peticiones:");
+	   		String ip_zone = input.nextLine();
+	   		System.out.println("[Servidor Central]: Puerto Peticiones:");
+	   		String port_zone = input.nextLine();
+	   		System.out.println("[Servidor Central]: Puerto Multicast:");
+	   		String port_multicast = input.nextLine();
+
+	   		Servidor server = new Servidor(ns_zone,ip_zone,ip_multi,port_zone,port_multicast);
+	   	 	lista.add(server); 
+		}
+
+		// Iterator<Servidor> itr = lista.iterator(); // imprimir nombres de arreglo de servidores
+		
+		// while(itr.hasNext()){
+		// 	Servidor elemento = itr.next();
+		// 	System.out.print(elemento.nombre+" / ");
+		// }
 
 		try {
 			
@@ -39,38 +67,34 @@ public class ServidorCentral{
 				}
 
 				try {
-					// Obtener datos del cliente para realizar eco
+						// Obtener datos del cliente para realizar eco
 					clientAddr = packet.getAddress();
 					clientPort = packet.getPort();
 					System.out.println(clientPort);
 					System.out.println("2.-NO");
-					msg = new String(data, 0, packet.getLength(), "UTF-8"); // nombre distrito
+					mensaje = new String(data, 0, packet.getLength(), "UTF-8"); // nombre distrito
 
-					Iterator<Servidor>itr = zonas.iterator();
-
-					Servidor temp;
-					boolean state;
-					
+					Iterator<Servidor>itr = lista.iterator();
+						
 					while (itr.hasNext()) {
 						Servidor elemento = itr.next();
-						if (msg.equals(elemento.nombre)) {
-							
-							System.out.println("[Servidor Central]: Dar autorizacion a "+ clientAddr + " por distrito "+ msg + "?.");
+						if (mensaje.equals(elemento.nombre)) {
+						
+							System.out.println("[Servidor Central]: Dar autorizacion a "+ clientAddr + " por distrito "+ mensaje + "?.");
 							System.out.println("NOTA: Debes contestar la pregunta anterior, antes de dar autorizacion");
 							System.out.println("1.-SI");	
 							System.out.println("2.-NO");
-							//menu.dormir();
-							Scanner input_op = new Scanner(System.in);
-							//menu = new ThreadMenu(zonas);
+							String opcion = input.nextLine();
+
 							String reply;
-							switch (Integer.parseInt(input_op.nextLine())){
+							switch (Integer.parseInt(opcion)){
 								case 1:
 									System.out.println("[Servidor Central]:Haz autorizado a "+clientAddr);
 									reply = elemento.ipzona+" "+elemento.ipmult+" "+elemento.ppet+" "+elemento.pmult;
 									data = reply.getBytes("UTF-8");
 									packet = new DatagramPacket(data, data.length, clientAddr, clientPort);
 									socket.send(packet);
-									input_op = null;
+									//input_op = null;
 									break;
 									
 								case 2:
@@ -80,36 +104,25 @@ public class ServidorCentral{
 									packet = new DatagramPacket(data, data.length, clientAddr, clientPort);
 									socket.send(packet);
 									//menu = new ThreadMenu(zonas);
-									input_op = null;
+									//input_op = null;
 									break;
 								default:
 									System.out.println("[Servidor Central]:Opcion Invalida");
 									break;
 							}
-
-							//System.out.println("[Servidor Central]: Nombre: "+elemento.nombre+", IP Peticiones:"+elemento.ipzona+", IP Multicast:"+elemento.ipmult+", Puerto Peticiones:"+elemento.ppet+", Puerto Multicast:"+elemento.pmult);
-							//temp = new Servidor(elemento.ipzona,elemento.ipzona,elemento.ipmult,elemento.ppet,elemento.pmult);
-							//String reply = elemento.ipzona+" "+elemento.ipmult+" "+elemento.ppet+" "+elemento.pmult;
-							//data = reply.getBytes("UTF-8");
-							//packet = new DatagramPacket(data, data.length, clientAddr, clientPort);
-							//packet = new DatagramPacket(data, data.length, clientAddr, clientPort);
-							//socket.send(packet);
 						}
-
 					}
-
-				} catch (UnsupportedEncodingException ex) {
+				}catch (UnsupportedEncodingException ex) {
 					System.out.println("[Servidor Central]: Codificacion no soportada " + ex.getMessage());
 				} catch (IOException ex) {
 					System.out.println("[Servidor Central]: No pudo ser enviado " + ex.getMessage());
 					System.exit(0);
 				}
-    		}
-			//imprimeArray(zonas);
-  		}catch (IOException ie) {
+			}
+		}catch (IOException ie) {
 			System.out.println("[Servidor Central]: Servidor no pudo arrancar:" + ie.getMessage());
 			System.exit(0);	// Comunicacion con cliente
 		}
-            
-    }       
+	}
 }
+
