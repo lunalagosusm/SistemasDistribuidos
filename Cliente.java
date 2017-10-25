@@ -93,12 +93,24 @@ public class Cliente{
 		messageReturn = consultarZona(distrito,ip_scentral,port_scentral);
 		System.out.println(messageReturn + "primer flag");
 
-		String[] div = messageReturn.split(" "); 
+		// if (messageReturn.equals("Permiso Denegado")) {
+		// 	System.out.println("[Cliente]: No haz sido autorizado para explorar este distrito:");
+		// }
+		// else{
+		// 	String[] div = messageReturn.split(" ");
+		// 	addr_mult = InetAddress.getByName(div[1].trim());
+		// 	addr_zone = InetAddress.getByName(div[0].trim());
+		// 	p_zona = Integer.parseInt(div[2].trim());
+		// 	p_multicast = Integer.parseInt(div[3].trim());
+		// }
 
-		addr_mult = InetAddress.getByName(div[1].trim());
-		addr_zone = InetAddress.getByName(div[0].trim());
-		p_zona = Integer.parseInt(div[2].trim());
-		p_multicast = Integer.parseInt(div[3].trim());
+
+		 String[] div = messageReturn.split(" "); 
+
+		 addr_mult = InetAddress.getByName(div[1].trim());
+		 addr_zone = InetAddress.getByName(div[0].trim());
+		 p_zona = Integer.parseInt(div[2].trim());
+		 p_multicast = Integer.parseInt(div[3].trim());
 
 		ThreadMulticast escuchar = new ThreadMulticast(p_multicast,addr_mult); 
 		escuchar.start();
@@ -174,16 +186,17 @@ public class Cliente{
 					messageReturn = consultarZona(distrito,ip_scentral,port_scentral);
 					//div = messageReturn.split(" "); 
 
-					System.out.println(messageReturn.length());
+					//System.out.println(messageReturn.length().trim());
 					System.out.println(messageReturn.getBytes());
 					System.out.println(messageReturn);
 					System.out.println("Permiso Denegado".length());
 					System.out.println("Permiso Denegado".getBytes());
 
-					if (messageReturn.equals("Permiso Denegado")) {
+					if (messageReturn.trim().equals("Permiso Denegado")) {
 						System.out.println("[Cliente]: No haz sido autorizado para explorar este distrito:");
 					}
 					else{
+						//String[] div = messageReturn.split(" ");
 						div = messageReturn.split(" ");
 						addr_mult = InetAddress.getByName(div[1].trim());
 						addr_zone = InetAddress.getByName(div[0].trim());
@@ -196,7 +209,11 @@ public class Cliente{
 					}
 
 					break;
-				case 3:// CAPTURAR TITAN
+				case 3:// CAPTURAR TITANSystem.out.println(messageReturn.length());
+					System.out.println(messageReturn.getBytes());
+					System.out.println(messageReturn);
+					System.out.println("Permiso Denegado".length());
+					System.out.println("Permiso Denegado".getBytes());
 					System.out.println("*****************************************");
 					System.out.println("[Cliente] ID de Titan a capturar:");
 					String numero = input.nextLine();
