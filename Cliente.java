@@ -128,7 +128,6 @@ public class Cliente{
 			mensaje =null;
 			switch (Integer.parseInt(input.nextLine())){
 				case 1: //LISTAR TITANES DEL DISTRITO
-
 					mensaje = "LISTAR";
 					try{
 						byte[] datt;
@@ -140,8 +139,8 @@ public class Cliente{
 						//recibir respuesta
 						datt = new byte[packetSize];
 						pack = new DatagramPacket(datt, datt.length);
+						System.out.println("FLAG: Primera bandera");
 						sock.receive(pack);
-				
 						resp= new String(pack.getData());
 						//
 						String pr="cadena a comparar";
@@ -172,8 +171,10 @@ public class Cliente{
 						}
 					}
 					catch(IOException e){
+						System.out.println("IMPRIME EXEPCION CASE");
 						System.out.println(e.getMessage());
 					}
+					System.out.println("FLAG: última bandera");
 
 					break;
 				case 2: // CAMBIAR DISTRITO
