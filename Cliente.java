@@ -91,6 +91,8 @@ public class Cliente{
 		String zona = input.nextLine(); // string con el nombre de la zona a explorar
 
 		messageReturn = consultarZona(zona,ip_scentral,port_scentral);
+
+		System.out.println(messageReturn + "primer flag");
 		String[] div = messageReturn.split(" "); 
 
 		addr_mult = InetAddress.getByName(div[1].trim());
@@ -172,7 +174,11 @@ public class Cliente{
 					messageReturn = consultarZona(zona,ip_scentral,port_scentral);
 					//div = messageReturn.split(" "); 
 
-					if (messageReturn == "Permiso Denegado") {
+					System.out.println(messageReturn.length());
+					System.out.println(messageReturn);
+					System.out.println("Permiso Denegado".length());
+
+					if (messageReturn.equals("Permiso Denegado")) {
 						System.out.println("[Cliente]: No haz sido autorizado para explorar este distrito:");
 					}
 					else{
@@ -200,7 +206,7 @@ public class Cliente{
 						pack = new DatagramPacket(dattc, dattc.length, addr_zone, p_zona);
 						sock = new DatagramSocket();
 						sock.send(pack);
-						sock.close();
+						//sock.close();
 						//recibir respuesta
 						dattc = new byte[packetSize];
 						pack = new DatagramPacket(dattc, dattc.length);
