@@ -40,43 +40,63 @@ public class Consola extends Thread{
 					case "PUBLICAR":
 						switch (frac[1].toString().toUpperCase()){
 							case "TITAN":
-					System.out.println("[SERVIDOR DISTRITO:"+NombreSZ+"] Introducir Nombre:");
-					nombre = sc.nextLine();
-					System.out.println("[SERVIDOR DISTRITO:"+NombreSZ+"] Introducir Tipo:");
-					tipo = sc.nextLine();
-					Titan tit = new Titan(nombre,id,tipo);
-					id=id+1;
+								System.out.println("[SERVIDOR DISTRITO:"+NombreSZ+"] Introducir Nombre:");
+								nombre = sc.nextLine();
+								System.out.println("[SERVIDOR DISTRITO:"+NombreSZ+"] Introducir Tipo:");
+								System.out.println("1.- Normal");
+								System.out.println("2.- Exentrico");
+								System.out.println("3.- Cambiante");
+								switch (Integer.parseInt(sc.nextLine())){
+									case 1:
+										tipo = "Normal";
+										break;
+									case 2:
+										tipo = "Exentrico";
+										break;
+									case 3:
+										tipo = "Cambiante";
+										break;
+									default:
+										tipo = "Desconocido";
+								}
+								Titan tit = new Titan(nombre,id,tipo);
+								id = id + 1;
 					
-					//agregar Titan a lista local
-					lista.add(tit);
-					//
-					//mandar aviso por multicast
-					try{
-						byte[] utf8bytes = nombre.getBytes("UTF-8");
-						byte [] dato = new byte[utf8bytes.length];
-						dato =nombre.getBytes();
-						DatagramPacket dataG = new DatagramPacket(dato, dato.length, InetAddress.getByName(address), puertoM);
-						MulticastSocket enviar = new MulticastSocket();
-						enviar.send(dataG);
-						enviar.close();
-					}
-					catch (IOException e){
-						System.out.println(e.getMessage());
-					}
-					System.out.println("[SERVIDOR DISTRITO:"+NombreSZ+"] Se ha publicado a "+nombre);
-					//
-					break;
-				default:
-					System.out.println("[SERVIDOR DISTRITO:"+NombreSZ+"] (2) Comando no Reconocido");
-				}
+								//agregar Titan a lista local
+								lista.add(tit);
+								//
+								//mandar aviso por multicast
+								try{
+									String inf;
+									byte [] dato;
+									inf = nombre+" "+tipo+" "+id;
+									dato = inf.getBytes("UTF-8");
+									DatagramPacket dataG = new DatagramPacket(dato, dato.length, InetAddress.getByName(address), puertoM);
+									MulticastSocket enviar = new MulticastSocket();
+									enviar.send(dataG);
+									enviar.close();
+								}
+								catch (IOException e){
+									System.out.println(e.getMessage());
+								}
+								System.out.println("[SERVIDOR DISTRITO: "+NombreSZ+"] Se ha publicado a "+nombre);
+								System.out.println("**************");
+								System.out.println("ID: "+id);
+								System.out.println("Nombre: "+nombre);
+								System.out.println("Tipo: "+tipo);
+								System.out.println("**************");
+								//
+								break;
+							default:
+								System.out.println("[SERVIDOR DISTRITO:"+NombreSZ+"] (2) Comando no Reconocido");
+						}
 						break;
 					default:
 						System.out.println("[SERVIDOR DISTRITO:"+NombreSZ+"] (1) Comando no Reconocido");
-					}
+				}
 			}
 			else{
-				System.out.println("[SERVIDOR DISTRITO:"+NombreSZ+"] (0) Comando no Reconocido");
-								
+				System.out.println("[SERVIDOR DISTRITO:"+NombreSZ+"] (0) Comando no Reconocido");				
 			}
 		}
 	}

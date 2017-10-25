@@ -1,0 +1,24 @@
+Tarea Nueva
+
+10.10.2.216 Central
+10.10.2.92 cliente
+10.10.2.232 distrito
+
+“Se asume por ahora que el servidor acepta la primera conexión de un cliente.”
+
+En servidor Central: 	Falta ver lo de los hilos (se traba al cliente cambiar de servidor)
+
+En Servidor Cliente:  	1 (Listar Titanes):
+									NO FUNCIONA
+					2 (Cambiar distrito): 
+									SI FUNCIONA (pero servidor se traba)
+					3 (Capturar Titan):
+									NO FUNCIONA, muestra “Socket Closed”
+					4 (Asesinar Titan):
+									NADA HECHO
+					5 (Listar Titanes capturados):
+									SI FUNCIONA, muestra solo “No has capturado ningún Distribumon!”
+					6 (Listar Titanes asesinados):
+									NADA HECHO
+
+En Servidor Distrito: 	
