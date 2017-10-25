@@ -5,25 +5,20 @@ import java.util.*;
 public class ThreadMenu extends Thread {
 
   public ArrayList <Servidor> array ;
-  public boolean continuar = true;
 
   public ThreadMenu(ArrayList lista){
       array = lista;
   }
 
-  public void dormir()throws InterruptedException{
-      sleep(1000);
-  }
-
-
 	public void run() { 
 
-		while (continuar) {
+    //ArrayList <Servidor> zonas = new ArrayList <Servidor> ();
+		for (;;) {
 
 			Scanner input = new Scanner(System.in);
-            System.out.println("*****************************************");
-   			System.out.println("AGREGAR DISTRITO");
-   			System.out.println("[Servidor Central]: Nombre Distrito:");
+
+   			System.out.println("[Servidor Central]: Agrega Servidor de Zona");
+   			System.out.println("[Servidor Central]: Nombre:");
    			String ns_zone = input.nextLine();
    			System.out.println("[Servidor Central]: IP Multicast:");
    			String ip_multi = input.nextLine();

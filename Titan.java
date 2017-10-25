@@ -5,13 +5,13 @@ import java.net.MulticastSocket;
 import java.net.UnknownHostException;
 //import java.util.Vector;
 
-public class Distribumon{
+public class Titan{
 	String nombre;
 	int id;
-	int nivel;
-	public Distribumon(String nom,int ide, int lvl){
+	String tipo;
+	public Titan(String nom,int ide, String type){
 		this.nombre = nom;
 		this.id = ide;
-		this.nivel = lvl;
+		this.tipo = type;
 		}
 	}

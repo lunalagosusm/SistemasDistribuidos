@@ -28,7 +28,7 @@ public class ThreadMulticast extends Thread {
                 DatagramPacket paquete = new DatagramPacket(datamult,datamult.length);
                 receptor.receive(paquete);
                 msgmulti = new String (paquete.getData());
-                System.out.println("[Cliente]: Aparece nuevo Distribumon!: "+ msgmulti);
+                System.out.println("[Cliente]: Aparece nuevo Titan!: "+ msgmulti);
 
             } catch (IOException iee) {
                 System.out.println("[Cliente]: Error de direccion :" + iee.getMessage());
