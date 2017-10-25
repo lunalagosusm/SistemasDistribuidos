@@ -33,7 +33,7 @@ public class Cliente{
 			packet = new DatagramPacket(data, data.length, address, Integer.parseInt(puerto));//, address, ServidorCentral.serverPort);
 			socket.send(packet);
 
-			data = new byte[ServidorCentral.packetSize];
+			data = new byte[1024];//SE CAMBIO 1024 POR "ServidorCentral.packetSize""
 			packet = new DatagramPacket(data, data.length);
 			socket.receive(packet);
 
@@ -91,7 +91,6 @@ public class Cliente{
 		String distrito = input.nextLine(); // string con el nombre de la distrito a explorar
 
 		messageReturn = consultarZona(distrito,ip_scentral,port_scentral);
-		System.out.println(messageReturn + "primer flag");
 
 		// if (messageReturn.equals("Permiso Denegado")) {
 		// 	System.out.println("[Cliente]: No haz sido autorizado para explorar este distrito:");

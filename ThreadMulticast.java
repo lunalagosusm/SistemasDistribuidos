@@ -17,7 +17,7 @@ public class ThreadMulticast extends Thread {
         p_multicast = puerto;
     }
 
-    public void run() { 
+    public void run() {
 	    for (; ; ) {
             try {
                 // Recibir paquete del servidor
@@ -28,7 +28,11 @@ public class ThreadMulticast extends Thread {
                 DatagramPacket paquete = new DatagramPacket(datamult,datamult.length);
                 receptor.receive(paquete);
                 msgmulti = new String (paquete.getData());
-                System.out.println("[Cliente]: Aparece nuevo Titan!: "+ msgmulti);
+                String[] div = msgmulti.split(" "); 
+                String nombre_titan = div[0].trim();
+                String tipo_titan = div[1].trim();
+                String id_titan = div[2].trim();
+                System.out.println("[Cliente]: Aparece nuevo Titan!: "+nombre_titan+", tipo "+tipo_titan+", ID "+id_titan+".");
 
             } catch (IOException iee) {
                 System.out.println("[Cliente]: Error de direccion :" + iee.getMessage());

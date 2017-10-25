@@ -4,7 +4,7 @@ import java.util.*;
 
 public class ServidorCentral{
 
-	static final int serverPort = 32000;
+	static final int serverPort = 5000;
 	static final int packetSize = 1024;  
 
     public static void main (String [] args) throws InterruptedException{ 
