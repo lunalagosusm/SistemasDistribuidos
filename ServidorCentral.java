@@ -21,7 +21,7 @@ public class ServidorCentral{
 
 		Scanner input = new Scanner(System.in);
 
-		for (int i=1; i<=4; i++){
+		for (int i=1; i<=2; i++){
 			//Scanner input = new Scanner(System.in);
 	        System.out.println("*****************************************");
 	   		System.out.println("AGREGAR DISTRITO");

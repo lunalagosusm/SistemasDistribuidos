@@ -6,10 +6,16 @@ Tarea Nueva
 
 “Se asume por ahora que el servidor acepta la primera conexión de un cliente.”
 
-En servidor Central: 	Falta ver lo de los hilos (se traba al cliente cambiar de servidor)
+En servidor Central:	Funciona sin hilo, hay que hacerlo mas robusto
 
 En Servidor Cliente:  	1 (Listar Titanes):
 									NO FUNCIONA
+
+									en la linea 136 se agrego p_zona a DatagramSocket, ahora se ven las banderas.
+									Si no hay titanes, muestra que no hay.
+									si hay titantes, se va a la exepcion.
+
+
 					2 (Cambiar distrito): 
 									SI FUNCIONA (pero servidor se traba)
 					3 (Capturar Titan):

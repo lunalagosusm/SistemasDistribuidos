@@ -98,6 +98,7 @@ public class Peticiones extends Thread{
 						break;
 					case "LISTAR":
 						//crear superstring iterando sobre lista
+						System.out.println("ASKJDNASKJDBASKJDASLKJFHALSJKDHALSKJDH");////////////////////////////////////////////////////
 						for (Iterator<Titan> i = lista.iterator(); i.hasNext();) {
 							Titan ttitann = i.next();
 							aviso = aviso+":"+ttitann.nombre+" "+ttitann.id+" "+ttitann.tipo;

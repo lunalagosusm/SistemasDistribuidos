@@ -133,30 +133,42 @@ public class Cliente{
 						byte[] datt;
 						datt = mensaje.getBytes("UTF-8");
 						pack = new DatagramPacket(datt, datt.length, addr_zone, p_zona);
-						sock = new DatagramSocket();
+						sock = new DatagramSocket(p_zona);
 						sock.send(pack);
-						sock.close();
+						//sock.close();
 						//recibir respuesta
 						datt = new byte[packetSize];
 						pack = new DatagramPacket(datt, datt.length);
 						System.out.println("FLAG: Primera bandera");
+
+						System.out.println(datt);
+						System.out.println(datt.length);
+						System.out.println(addr_zone);
+						System.out.println(p_zona);
+
 						sock.receive(pack);
+						System.out.println("FLAG 2");
 						resp= new String(pack.getData());
+						System.out.println("FLAG 3");
 						//
 						String pr="cadena a comparar";
 						char _toCompare='c';
 						int rep=0;
 						char []caracteres=resp.toCharArray();
+						System.out.println("FLAG 4");
 						for(int ii=0;ii<caracteres.length;ii++){
 							if(':' ==caracteres[ii]){
 								rep++;
 							}
 						//
 						}
+						System.out.println("FLAG 5");
 						if (rep>1){
+							System.out.println("FLAG 6");
 							String[] titn = resp.split(":");
 							System.out.println("[Cliente] Titanes por capturar!");
 							for (int t=0; t < titn.length; t++){
+								System.out.println("FLAG 7");
 								titandato = titn[t].split(" ");
 								//imprimir
 								System.out.println("*****");
@@ -164,9 +176,11 @@ public class Cliente{
 								System.out.println("ID: "+titandato[1]);
 								System.out.println("Tipo: "+titandato[2]);
 							}
+							System.out.println("FLAG 8");
 							System.out.println("*****");
 						}
 						else{
+							System.out.println("FLAG 9");
 							System.out.println("[Cliente] No hay Titanes por capturar!");
 						}
 					}
