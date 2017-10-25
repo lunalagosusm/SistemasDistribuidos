@@ -13,14 +13,14 @@ public class Consola extends Thread{
 	private Scanner sc = new Scanner(System.in);
 	//private Vector<int> vec;
 	private String address;
-	public LinkedList<Distribumon> lista;
+	public LinkedList<Titan> lista;
 	private String NombreSZ;
 	private int puertoM;
 	private String s;//=null;
 	public int id;
 	public String nombre;
-	public int nivel;
-	public Consola(LinkedList<Distribumon> lst, String addr, int puerto, String NomSZ){
+	public String tipo;
+	public Consola(LinkedList<Titan> lst, String addr, int puerto, String NomSZ){
 		this.lista=lst;
 		this.address=addr;
 		this.puertoM=puerto;
@@ -29,26 +29,26 @@ public class Consola extends Thread{
 	
 	public void run(){
 		id=0;
-		System.out.println("[SERVIDOR ZONA:"+NombreSZ+"] CONSOLA");
+		System.out.println("[SERVIDOR DISTRITO:"+NombreSZ+"] CONSOLA");
 		while(true){
 			s = sc.nextLine().trim();
 //			switch (s){
-//				case "Publicar Distribumon":
+//				case "Publicar Titan":
 			String[] frac = s.split(" ");
 			if (frac.length == 2) {
 				switch (frac[0].toString().toUpperCase()){
 					case "PUBLICAR":
 						switch (frac[1].toString().toUpperCase()){
-							case "DISTRIBUMON":
-					System.out.println("[SERVIDOR ZONA:"+NombreSZ+"] Introducir Nombre:");
+							case "TITAN":
+					System.out.println("[SERVIDOR DISTRITO:"+NombreSZ+"] Introducir Nombre:");
 					nombre = sc.nextLine();
-					System.out.println("[SERVIDOR ZONA:"+NombreSZ+"] Introducir Nivel:");
-					nivel = Integer.parseInt(sc.nextLine());
-					Distribumon poke = new Distribumon(nombre,id,nivel);
+					System.out.println("[SERVIDOR DISTRITO:"+NombreSZ+"] Introducir Tipo:");
+					tipo = sc.nextLine();
+					Titan tit = new Titan(nombre,id,tipo);
 					id=id+1;
 					
-					//agregar distribumon a lista local
-					lista.add(poke);
+					//agregar Titan a lista local
+					lista.add(tit);
 					//
 					//mandar aviso por multicast
 					try{
@@ -63,19 +63,19 @@ public class Consola extends Thread{
 					catch (IOException e){
 						System.out.println(e.getMessage());
 					}
-					System.out.println("[SERVIDOR ZONA:"+NombreSZ+"] Se ha publicado a "+nombre);
+					System.out.println("[SERVIDOR DISTRITO:"+NombreSZ+"] Se ha publicado a "+nombre);
 					//
 					break;
 				default:
-					System.out.println("[SERVIDOR ZONA:"+NombreSZ+"] (2) Comando no Reconocido");
+					System.out.println("[SERVIDOR DISTRITO:"+NombreSZ+"] (2) Comando no Reconocido");
 				}
 						break;
 					default:
-						System.out.println("[SERVIDOR ZONA:"+NombreSZ+"] (1) Comando no Reconocido");
+						System.out.println("[SERVIDOR DISTRITO:"+NombreSZ+"] (1) Comando no Reconocido");
 					}
 			}
 			else{
-				System.out.println("[SERVIDOR ZONA:"+NombreSZ+"] (0) Comando no Reconocido");
+				System.out.println("[SERVIDOR DISTRITO:"+NombreSZ+"] (0) Comando no Reconocido");
 								
 			}
 		}

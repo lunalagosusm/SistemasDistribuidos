@@ -13,7 +13,7 @@ import java.util.Iterator;
 public class Peticiones extends Thread{
 	private static Scanner sc;
 	private String address;
-	public LinkedList<Distribumon> lista;
+	public LinkedList<Titan> lista;
 	private String NombreSZ;
 	private int puertoP;
 	private String s=null;
@@ -24,7 +24,7 @@ public class Peticiones extends Thread{
 	public String aviso;
 	private int flag=0;
 /*	public String nombre;
-	public int nivel;*/
+	public String tipo;*/
 	
 	public int packetSize = 1024;
 	
@@ -32,7 +32,7 @@ public class Peticiones extends Thread{
 
 	////
 	
-	public Peticiones(LinkedList<Distribumon> lst, String addr, int puerto, String NomSZ){
+	public Peticiones(LinkedList<Titan> lst, String addr, int puerto, String NomSZ){
 		this.lista=lst;
 		this.address=addr;
 		this.puertoP=puerto;
@@ -69,11 +69,11 @@ public class Peticiones extends Thread{
 						if (s.length>1){
 							int idc = Integer.parseInt(s[1]);
 							//buscar en lista
-							for (Iterator<Distribumon> i = lista.iterator(); i.hasNext();) {
-								Distribumon pokemon = i.next();
-								if (pokemon.id == idc){
+							for (Iterator<Titan> i = lista.iterator(); i.hasNext();) {
+								Titan ttitann = i.next();
+								if (ttitann.id == idc){
 									flag=1;
-									aviso = pokemon.nombre+" "+pokemon.nivel;
+									aviso = ttitann.nombre+" "+ttitann.tipo;
 									//eliminar
 									i.remove();
 									//mensaje al cliente q
@@ -82,8 +82,8 @@ public class Peticiones extends Thread{
 							}
 							//si no esta, informar al cliente q
 							if (flag==0){
-								aviso = "Ups! Distribumon no disponible";
-								System.out.println("Ups! Distribumon no disponible");//////////////
+								aviso = "Ups! Titan no disponible";
+								System.out.println("Ups! Titan no disponible");//////////////
 							}
 							else{
 								flag=0;
@@ -92,15 +92,15 @@ public class Peticiones extends Thread{
 						}
 						else{
 							//error, avisarle al cliente q
-							aviso = "Ups! Distribumon no identificable";
-							System.out.println("Ups! Distribumon no identificable");///////////////
+							aviso = "Ups! Titan no identificable";
+							System.out.println("Ups! Titan no identificable");///////////////
 						}
 						break;
 					case "LISTAR":
 						//crear superstring iterando sobre lista
-						for (Iterator<Distribumon> i = lista.iterator(); i.hasNext();) {
-							Distribumon pokemon = i.next();
-							aviso = aviso+":"+pokemon.nombre+" "+pokemon.id+" "+pokemon.nivel;
+						for (Iterator<Titan> i = lista.iterator(); i.hasNext();) {
+							Titan ttitann = i.next();
+							aviso = aviso+":"+ttitann.nombre+" "+ttitann.id+" "+ttitann.tipo;
 						}	//enviar a cliente
 						break;
 					default:

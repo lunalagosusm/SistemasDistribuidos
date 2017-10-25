@@ -6,11 +6,11 @@ public class Cliente{
 
 	///////////
 //	public String cons=null;
-	public String[] pokedato=null;
+	public String[] titandato=null;
 	public String mensaje = null;
 	public int packetSize = 1024;
 	public String resp=null;
-	public LinkedList<Distribumon> lista;
+	public LinkedList<Titan> lista;
 	public int id;
 	///////////
 	public static String consultarZona(String nombre,String direccion, String puerto){
@@ -30,7 +30,7 @@ public class Cliente{
 			address = InetAddress.getByName(direccion);
 			socket = new DatagramSocket();
 			data = nombre.getBytes("UTF-8"); // leer mensaje a enviar desde variable zona
-			packet = new DatagramPacket(data, data.length, address, Integer.parseInt(puerto));
+			packet = new DatagramPacket(data, data.length, address, Integer.parseInt(puerto));//, address, ServidorCentral.serverPort);
 			socket.send(packet);
 
 			data = new byte[ServidorCentral.packetSize];
@@ -40,8 +40,8 @@ public class Cliente{
 			msgReturn = new String(packet.getData());
 			//if (msgReturn=="Permiso Denegado") {
 			//	System.out.println("[Cliente]: No haz sido autorizado para explorar esta zona:");
-			//}
-			
+			//}	
+
 
 		} catch (IOException ex) {
 			System.out.println("[Cliente]: No pudo leer mensaje :" + ex.getMessage());
@@ -56,11 +56,11 @@ public class Cliente{
 		
 		///////////
 	//	String cons=null;
-		String[] pokedato=null;
+		String[] titandato=null;
 		String mensaje = null;
 		int packetSize = 1024;
 		String resp=null;
-		LinkedList<Distribumon> lista = new LinkedList<Distribumon>();
+		LinkedList<Titan> lista = new LinkedList<Titan>();
 		int id;
 		///////////
 		//DatagramSocket socket; // para enviar datos
@@ -71,7 +71,7 @@ public class Cliente{
 		DatagramPacket pack;
 		DatagramSocket sock;
 //		byte[] datt;
-		id =0;
+		id = 0;
 		//////////////
 
 		InetAddress address,addr_zone,addr_mult; // Hacia donde enviar y recibir
@@ -87,10 +87,10 @@ public class Cliente{
 		String ip_scentral = input.nextLine();
 		System.out.println("[Cliente]: Ingresar Puerto Servidor Central:");
 		String port_scentral = input.nextLine();
-		System.out.println("[Cliente]: Introducir Nombre distrito a investigar, Ej: Trost, Shiganshina:");
-		String zona = input.nextLine(); // string con el nombre de la zona a explorar
+		System.out.println("[Cliente]: Introducir Nombre de Distrito a investigar, Ej: Trost, Shiganshina:");
+		String distrito = input.nextLine(); // string con el nombre de la distrito a explorar
 
-		messageReturn = consultarZona(zona,ip_scentral,port_scentral);
+		messageReturn = consultarZona(distrito,ip_scentral,port_scentral);
 		String[] div = messageReturn.split(" "); 
 
 		addr_mult = InetAddress.getByName(div[1].trim());
@@ -104,7 +104,7 @@ public class Cliente{
 		for (; ; ) {
 			System.out.println("*****************************************");
 			System.out.println("[Cliente] CONSOLA");
-			System.out.println("[Cliente] (1) Listar Titanes");
+			System.out.println("[Cliente] (1) Listar Titanes en Distrito");
 			System.out.println("[Cliente] (2) Cambiar distrito");
 			System.out.println("[Cliente] (3) Capturar Titan");
 			System.out.println("[Cliente] (4) Asesinar Titan");
@@ -112,7 +112,7 @@ public class Cliente{
 			System.out.println("[Cliente] (6) Listar Titanes asesinados");
 			mensaje =null;
 			switch (Integer.parseInt(input.nextLine())){
-				case 1: // LISTAR TITANES DEL DISTRITO
+				case 1: //LISTAR TITANES DEL DISTRITO
 
 					mensaje = "LISTAR";
 					try{
@@ -140,20 +140,20 @@ public class Cliente{
 						//
 						}
 						if (rep>1){
-							String[] pkmn = resp.split(":");
-							System.out.println("[Cliente] Distribumones por capturar!");
-							for (int t=0; t < pkmn.length; t++){
-								pokedato = pkmn[t].split(" ");
+							String[] titn = resp.split(":");
+							System.out.println("[Cliente] Titanes por capturar!");
+							for (int t=0; t < titn.length; t++){
+								titandato = titn[t].split(" ");
 								//imprimir
 								System.out.println("*****");
-								System.out.println("nombre: "+pokedato[0]);
-								System.out.println("ID: "+pokedato[1]);
-								System.out.println("Nivel: "+pokedato[2]);
+								System.out.println("nombre: "+titandato[0]);
+								System.out.println("ID: "+titandato[1]);
+								System.out.println("Tipo: "+titandato[2]);
 							}
 							System.out.println("*****");
 						}
 						else{
-							System.out.println("[Cliente] No hay Distribumones por capturar!");
+							System.out.println("[Cliente] No hay Titanes por capturar!");
 						}
 					}
 					catch(IOException e){
@@ -168,8 +168,8 @@ public class Cliente{
 					System.out.println("[Cliente]: Ingresar Puerto Servidor Central:");
 					port_scentral = input.nextLine();
 					System.out.println("[Cliente]: Introducir Nombre distrito a investigar, Ej: Trost, Shiganshina:");
-					zona = input.nextLine(); // string con el nombre de la zona a explorar
-					messageReturn = consultarZona(zona,ip_scentral,port_scentral);
+					distrito = input.nextLine(); // string con el nombre del distrito a explorar
+					messageReturn = consultarZona(distrito,ip_scentral,port_scentral);
 					//div = messageReturn.split(" "); 
 
 					if (messageReturn == "Permiso Denegado") {
@@ -181,7 +181,7 @@ public class Cliente{
 						addr_zone = InetAddress.getByName(div[0].trim());
 						p_zona = Integer.parseInt(div[2].trim());
 						p_multicast = Integer.parseInt(div[3].trim());
-					
+
 						escuchar.stop();
 						escuchar = new ThreadMulticast(p_multicast,addr_mult); 
 						escuchar.start();
@@ -214,13 +214,13 @@ public class Cliente{
 						}
 						else
 						{
-							String[] pokemon = resp.split(" ");
-							Distribumon poke = new Distribumon( pokemon[0],id, Integer.parseInt(pokemon[1]));
-							lista.add(poke);
+							String[] ttitann = resp.split(" ");
+							Titan tan = new Titan( ttitann[0],id,ttitann[1]);
+							lista.add(tan);
 							System.out.println("[Cliente] Titan capturado!");
 							System.out.println("id: "+id);
-							System.out.println("Nombre: "+pokemon[0]);
-							System.out.println("Nivel: "+ pokemon[1]);
+							System.out.println("Nombre: "+ttitann[0]);
+							System.out.println("Tipo: "+ ttitann[1]);
 							id=id+1;
 						}
 					}
@@ -229,18 +229,19 @@ public class Cliente{
 					}
 					break;
 				case 4:// ASESINAR TITAN
-
+					System.out.println("AUN NO IMPLEMENTADO ASESINAR TITAN");
+					break;
 				case 5:// LISTAR TITANES CAPTURADOS
 					//recorrer lista local e imprimir
 					if (lista.size()>0){
 						System.out.println("*****************************************");
 						System.out.println("[Cliente] Titanes actualmente capturados!");
-						for (Iterator<Distribumon> i = lista.iterator(); i.hasNext();) {
+						for (Iterator<Titan> i = lista.iterator(); i.hasNext();) {
 							System.out.println("*****");
-							Distribumon pokk = i.next();
-							System.out.println("nombre: "+pokk.nombre);
-							System.out.println("ID: "+pokk.id);
-							System.out.println("Nivel: "+pokk.nivel);
+							Titan titt = i.next();
+							System.out.println("nombre: "+titt.nombre);
+							System.out.println("ID: "+titt.id);
+							System.out.println("Tipo: "+titt.tipo);
 						}
 						System.out.println("*****");
 					}
@@ -250,10 +251,12 @@ public class Cliente{
 					}
 					break;
 				case 6:// LISTAR TITANES ASESINADOS
-
+					System.out.println("AUN NO IMPLEMENTADO LISTAR TITANES ASESINADOS");
+					break;
 				default:
 					break;
 			}
+
 			
 		}
 

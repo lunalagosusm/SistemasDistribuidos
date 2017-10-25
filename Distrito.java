@@ -8,20 +8,20 @@ import java.net.UnknownHostException;
 import java.util.Scanner;
 import java.util.LinkedList;
 
-public class ZoneServer {
+public class Distrito {
 	private static Scanner sc;
 	public static void main (String[] args) throws IOException {
 		sc = new Scanner (System.in);
-		LinkedList<Distribumon> lista = new LinkedList<Distribumon>();
-		System.out.println("[SERVIDOR ZONA] Nombre Servidor:");
+		LinkedList<Titan> lista = new LinkedList<Titan>();
+		System.out.println("[SERVIDOR Distrito] Nombre Servidor:");
 		String nombre = sc.nextLine();
-		System.out.println("[SERVIDOR ZONA:"+nombre+"] IP Multicast:");
+		System.out.println("[SERVIDOR DISTRITO:"+nombre+"] IP Multicast:");
 		String addrMulti = sc.nextLine();
-		System.out.println("[SERVIDOR ZONA:"+nombre+"] Puerto Multicast:");
+		System.out.println("[SERVIDOR DISTRITO:"+nombre+"] Puerto Multicast:");
 		String PtoMulti = sc.nextLine();
-		System.out.println("[SERVIDOR ZONA:"+nombre+"] IP Peticiones:");
+		System.out.println("[SERVIDOR DISTRITO:"+nombre+"] IP Peticiones:");
 		String addrPet = sc.nextLine();
-		System.out.println("[SERVIDOR ZONA:"+nombre+"] Puerto Peticiones:");
+		System.out.println("[SERVIDOR DISTRITO:"+nombre+"] Puerto Peticiones:");
 		String PtoPet = sc.nextLine();
 		
 		Consola hilo = new Consola(lista, addrMulti, Integer.parseInt(PtoMulti), nombre);
