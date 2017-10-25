@@ -90,13 +90,9 @@ public class Cliente{
 		System.out.println("[Cliente]: Introducir Nombre de Distrito a investigar, Ej: Trost, Shiganshina:");
 		String distrito = input.nextLine(); // string con el nombre de la distrito a explorar
 
-<<<<<<< HEAD
-		messageReturn = consultarZona(zona,ip_scentral,port_scentral);
-
-		System.out.println(messageReturn + "primer flag");
-=======
 		messageReturn = consultarZona(distrito,ip_scentral,port_scentral);
->>>>>>> dddefa6d3aaa065c4203c288bc070f4cb1895239
+		System.out.println(messageReturn + "primer flag");
+
 		String[] div = messageReturn.split(" "); 
 
 		addr_mult = InetAddress.getByName(div[1].trim());
@@ -179,8 +175,10 @@ public class Cliente{
 					//div = messageReturn.split(" "); 
 
 					System.out.println(messageReturn.length());
+					System.out.println(messageReturn.getBytes());
 					System.out.println(messageReturn);
 					System.out.println("Permiso Denegado".length());
+					System.out.println("Permiso Denegado".getBytes());
 
 					if (messageReturn.equals("Permiso Denegado")) {
 						System.out.println("[Cliente]: No haz sido autorizado para explorar este distrito:");
