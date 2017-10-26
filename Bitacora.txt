@@ -6,7 +6,7 @@ Tarea Nueva
 
 “Se asume por ahora que el servidor acepta la primera conexión de un cliente.”
 
-En servidor Central:	Funciona sin hilo, hay que hacerlo mas robusto
+En servidor Central:	Funciona sin hilo, hay que hacerlo mas robusto y ya pude contestar peticiones de clientes
 
 En Servidor Cliente:  	1 (Listar Titanes):
 									NO FUNCIONA
@@ -17,7 +17,9 @@ En Servidor Cliente:  	1 (Listar Titanes):
 
 
 					2 (Cambiar distrito): 
-									SI FUNCIONA (pero servidor se traba)
+									SI FUNCIONA, dejara de funcionar mientras el servidor central 
+									no se tan robusto
+
 					3 (Capturar Titan):
 									NO FUNCIONA, muestra “Socket Closed”
 					4 (Asesinar Titan):

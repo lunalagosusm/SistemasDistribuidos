@@ -71,7 +71,7 @@ public class ServidorCentral{
 					clientAddr = packet.getAddress();
 					clientPort = packet.getPort();
 					System.out.println(clientPort);
-					System.out.println("2.-NO");
+					//System.out.println("2.-NO");
 					mensaje = new String(data, 0, packet.getLength(), "UTF-8"); // nombre distrito
 
 					Iterator<Servidor>itr = lista.iterator();
@@ -91,6 +91,8 @@ public class ServidorCentral{
 								case 1:
 									System.out.println("[Servidor Central]:Haz autorizado a "+clientAddr);
 									reply = elemento.ipzona+" "+elemento.ipmult+" "+elemento.ppet+" "+elemento.pmult;
+									System.out.println(reply);
+									System.out.println(clientPort);
 									data = reply.getBytes("UTF-8");
 									packet = new DatagramPacket(data, data.length, clientAddr, clientPort);
 									socket.send(packet);
