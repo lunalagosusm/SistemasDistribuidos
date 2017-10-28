@@ -6,27 +6,32 @@ Tarea Nueva
 
 “Se asume por ahora que el servidor acepta la primera conexión de un cliente.”
 
-En servidor Central:	Funciona sin hilo, hay que hacerlo mas robusto y ya pude contestar peticiones de clientes
+En servidor Central:	Funciona sin hilo, hay que hacerlo mas robusto y ya puede contestar peticiones de clientes
 
-En Servidor Cliente:  	1 (Listar Titanes):
-									NO FUNCIONA
+En Servidor Cliente:  	1 (Listar Titanes):  Funciona
 
-									en la linea 136 se agrego p_zona a DatagramSocket, ahora se ven las banderas.
-									Si no hay titanes, muestra que no hay.
-									si hay titantes, se va a la exepcion.
-
-
-					2 (Cambiar distrito): 
+						2 (Cambiar distrito): 
 									SI FUNCIONA, dejara de funcionar mientras el servidor central 
 									no se tan robusto
 
-					3 (Capturar Titan):
-									NO FUNCIONA, muestra “Socket Closed”
-					4 (Asesinar Titan):
+						3 (Capturar Titan):
+									FUNCIONA, se arreglo el tema de id's locales
+						4 (Asesinar Titan):
 									NADA HECHO
-					5 (Listar Titanes capturados):
-									SI FUNCIONA, muestra solo “No has capturado ningún Distribumon!”
-					6 (Listar Titanes asesinados):
+						5 (Listar Titanes capturados):
+									FUNCIONA, se arreglo el tema de id's locales
+						6 (Listar Titanes asesinados):
 									NADA HECHO
 
+
+
 En Servidor Distrito: 	
+	CONSOLA: publicar titan funciona
+	PETICIONES: YA NO EXISTE, TODO SE ENCUENTRA EN MAIN DE Distrito.java
+	Distrito.java: solo hay que implementar un case mas que es "ASESINAR" ya que listar asesinados lo maneja el cliente
+
+PROPUESTA DE ASESINADOS:
+	-> agregar un atribuo mas a la clase titan que indique si esta vivo o muerto y que de manera local en el cliente 
+	   se modifique ese atributo dependiendo de la opcion que haya marcado, en el distrito por defecto estan todos vivos.
+	-> implementar un array unico de titanes en el cliente y que para listar los capturados, busque los q estan vivos y que busque a 	   los muertos en caso de listar asesinados
+

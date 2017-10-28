@@ -20,8 +20,6 @@ public class ThreadMulticast extends Thread {
     public void run() {
 	    for (; ; ) {
             try {
-                // Recibir paquete del servidor
-                //receptor.close();
                 receptor = new MulticastSocket(p_multicast);
                 receptor.joinGroup(addr_mult);
                 datamult = new byte[1024];

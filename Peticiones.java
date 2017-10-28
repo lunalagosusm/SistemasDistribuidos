@@ -27,6 +27,10 @@ public class Peticiones extends Thread{
 	public String tipo;*/
 	
 	public int packetSize = 1024;
+
+		DatagramPacket packet;
+		DatagramSocket socket;
+		byte[] data;
 	
 	////
 
@@ -38,18 +42,21 @@ public class Peticiones extends Thread{
 		this.puertoP=puerto;
 		this.NombreSZ=NomSZ;
 	}
-	@SuppressWarnings("resource")
+	/*@SuppressWarnings("resource")*/
 	public void run(){
-		DatagramPacket packet;
-		DatagramSocket socket;
-		byte[] data;
-		
-		
-		for(;;){
+		System.out.println("dentro del run peticiones!!!!!!!!");
 
-//			System.out.println("UdpServer: Esperando recibir paquetes ....");
+		try{
 
-			try {
+			System.out.println("Distrito Server: Esperando recibir paquetes ....");
+
+			for(;;) {
+
+/*	InetAddress address_pet;
+	address_pet = InetAddress.getByName("localhost");
+	ThreadDatagramS escuchar = new ThreadDatagramS(puertoP,address_pet); 
+	escuchar.start();*/
+
 				data = new byte[packetSize];
 				socket = new DatagramSocket(clientPort);
 				packet = new DatagramPacket(data, packetSize);
@@ -58,6 +65,7 @@ public class Peticiones extends Thread{
 				aviso = null;
 				System.out.println("esperando la wea");
 				socket.receive(packet);
+
 				System.out.println("recibi la wea");
 				clientAddr = packet.getAddress();
 				clientPort = packet.getPort();
@@ -113,12 +121,14 @@ public class Peticiones extends Thread{
 				dataSend = aviso.getBytes("UTF-8");
 				packet = new DatagramPacket(dataSend, dataSend.length, clientAddr, clientPort);
 				socket.send(packet);
-				//socket.close();
-			} catch (IOException ie) {
-				System.out.println("UdpServer: No se pudo recibir:" + ie.getMessage());
-				continue;
-			}
+				socket.close();
+			}//TRY
 			
-		}
+			
+		}//FOR
+		catch (IOException ie) {
+				System.out.println("UdpServer: No se pudo recibir:" + ie.getMessage());
+				//continue;
+			}
 	}
 }

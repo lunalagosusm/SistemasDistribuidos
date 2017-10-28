@@ -5,7 +5,7 @@ import java.util.*;
 public class ServidorCentral{
 
 	static final int serverPort = 5000;
-	static final int packetSize = 1024;
+	static final int packetSize = 1024; 
 
 	public static void main (String [] args){
 
@@ -51,7 +51,7 @@ public class ServidorCentral{
 			
 			socket = new DatagramSocket(serverPort);
 
-			for (;;){
+			for (;;){ 
 
 				data = new byte[ServidorCentral.packetSize];
 				// Crear paquete para recibir mensajes
@@ -61,8 +61,7 @@ public class ServidorCentral{
 						// esperar indefinidamente la llegada de un paquete
 					socket.receive(packet);
 
-				} 
-				catch (IOException ie) {
+				} catch (IOException ie) {
 					System.out.println("[Servidor Central]: No se pudo recibir:" + ie.getMessage());
 					continue;
 				}
@@ -81,19 +80,18 @@ public class ServidorCentral{
 						Servidor elemento = itr.next();
 						if (mensaje.equals(elemento.nombre)) {
 						
-							System.out.println("[Servidor Central]: Dar autorizacion a "+ clientAddr + " por Distrito "+ mensaje + "?.");
+							System.out.println("[Servidor Central]: Dar autorizacion a "+ clientAddr + " por distrito "+ mensaje + "?.");
 							//System.out.println("NOTA: Debes contestar la pregunta anterior, antes de dar autorizacion");
 							System.out.println("1.-SI");	
 							System.out.println("2.-NO");
 							String opcion = input.nextLine();
 
 							String reply;
-							switch (opcion){
-								case "1":
-									System.out.println("[Servidor Central] Respuesta a "+clientAddr+" por "+mensaje+".");
+							switch (Integer.parseInt(opcion)){
+								case 1:
+									System.out.println("[Servidor Central]:Haz autorizado a "+clientAddr);
 									reply = elemento.ipzona+" "+elemento.ipmult+" "+elemento.ppet+" "+elemento.pmult;
 									//System.out.println(reply);
-									System.out.println("[Servidor Central] Nombre: "+mensaje+", IP Multicast: "+elemento.ipmult+", Puerto Multicast: "+elemento.pmult+",IP Peticiones: "+elemento.ipzona+", Puerto Peticiones: "+elemento.ppet);
 									//System.out.println(clientPort);
 									data = reply.getBytes("UTF-8");
 									packet = new DatagramPacket(data, data.length, clientAddr, clientPort);
@@ -101,7 +99,7 @@ public class ServidorCentral{
 									//input_op = null;
 									break;
 									
-								case "2":
+								case 2:
 									System.out.println("[Servidor Central]:No haz autorizado a "+clientAddr);
 									reply = "Permiso Denegado";
 									data = reply.getBytes("UTF-8");
@@ -111,12 +109,7 @@ public class ServidorCentral{
 									//input_op = null;
 									break;
 								default:
-									System.out.println("[Servidor Central]:Opcion Invalida, se rechazará la conexión.");
-									System.out.println("[Servidor Central]:No haz autorizado a "+clientAddr);
-									reply = "Permiso Denegado";
-									data = reply.getBytes("UTF-8");
-									packet = new DatagramPacket(data, data.length, clientAddr, clientPort);
-									socket.send(packet);
+									System.out.println("[Servidor Central]:Opcion Invalida");
 									break;
 							}
 						}

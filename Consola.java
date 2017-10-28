@@ -32,8 +32,6 @@ public class Consola extends Thread{
 		System.out.println("[SERVIDOR DISTRITO:"+NombreSZ+"] CONSOLA");
 		while(true){
 			s = sc.nextLine().trim();
-//			switch (s){
-//				case "Publicar Titan":
 			String[] frac = s.split(" ");
 			if (frac.length == 2) {
 				switch (frac[0].toString().toUpperCase()){
@@ -46,14 +44,14 @@ public class Consola extends Thread{
 								System.out.println("1.- Normal");
 								System.out.println("2.- Exentrico");
 								System.out.println("3.- Cambiante");
-								switch (Integer.parseInt(sc.nextLine())){
-									case 1:
+								switch (sc.nextLine()){
+									case "1":
 										tipo = "Normal";
 										break;
-									case 2:
+									case "2":
 										tipo = "Exentrico";
 										break;
-									case 3:
+									case "3":
 										tipo = "Cambiante";
 										break;
 									default:
@@ -61,7 +59,7 @@ public class Consola extends Thread{
 								}
 								Titan tit = new Titan(nombre,id,tipo);
 								id = id + 1;
-					
+
 								//agregar Titan a lista local
 								lista.add(tit);
 								//
@@ -88,15 +86,15 @@ public class Consola extends Thread{
 								//
 								break;
 							default:
-								System.out.println("[SERVIDOR DISTRITO:"+NombreSZ+"] (2) Comando no Reconocido");
+								System.out.println("[SERVIDOR DISTRITO:"+NombreSZ+"] (2) COMANDO NO RECONOCIDO");
 						}
 						break;
 					default:
-						System.out.println("[SERVIDOR DISTRITO:"+NombreSZ+"] (1) Comando no Reconocido");
+						System.out.println("[SERVIDOR DISTRITO:"+NombreSZ+"] (1) COMANDO NO RECONOCIDO");
 				}
 			}
 			else{
-				System.out.println("[SERVIDOR DISTRITO:"+NombreSZ+"] (0) Comando no Reconocido");				
+				System.out.println("[SERVIDOR DISTRITO:"+NombreSZ+"] (0) COMANDO NO RECONOCIDO");				
 			}
 		}
 	}
