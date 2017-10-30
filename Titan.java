@@ -9,9 +9,11 @@ public class Titan{
 	String nombre;
 	int id;
 	String tipo;
-	public Titan(String nom,int ide, String type){
+	String estado;
+	public Titan(String nom,int ide, String type, String state){
 		this.nombre = nom;
 		this.id = ide;
 		this.tipo = type;
+		this.estado = state;
 		}
 	}

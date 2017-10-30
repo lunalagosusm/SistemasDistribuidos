@@ -8,7 +8,8 @@ public class Cliente{
 	public String mensaje = null;
 	public int packetSize = 1024;
 	public String resp=null;
-	public LinkedList<Titan> lista;
+	public LinkedList<Titan> lista_capturados;
+	public LinkedList<Titan> lista_asesinados;
 	public int id;
 	///////////
 	public static String consultarZona(String nombre,String direccion, String puerto){
@@ -61,7 +62,8 @@ public class Cliente{
 		String mensaje = null;
 		int packetSize = 1024;
 		String resp=null;
-		LinkedList<Titan> lista = new LinkedList<Titan>();
+		LinkedList<Titan> lista_capturados = new LinkedList<Titan>();
+		LinkedList<Titan> lista_asesinados = new LinkedList<Titan>();
 		int id;
 		///////////
 		//DatagramSocket socket; // para enviar datos
@@ -165,13 +167,6 @@ public class Cliente{
 					System.out.println("[Cliente]: Introducir Nombre distrito a investigar, Ej: Trost, Shiganshina:");
 					distrito = input.nextLine(); // string con el nombre del distrito a explorar
 					messageReturn = consultarZona(distrito,ip_scentral,port_scentral);
-					//div = messageReturn.split(" "); 
-
-					//System.out.println(messageReturn.length().trim());
-					//System.out.println(messageReturn.getBytes());
-					//System.out.println(messageReturn);
-					//System.out.println("Permiso Denegado".length());
-					//System.out.println("Permiso Denegado".getBytes());
 
 					if (messageReturn.trim().equals("Permiso Denegado")) {
 						System.out.println("[Cliente]: No haz sido autorizado para explorar este distrito:");
@@ -191,15 +186,10 @@ public class Cliente{
 
 					break;
 				case "3":// CAPTURAR TITAN
-					//System.out.println(messageReturn.length());
-					//System.out.println(messageReturn.getBytes());
-					//System.out.println(messageReturn);
-					//System.out.println("Permiso Denegado".length());
-					//System.out.println("Permiso Denegado".getBytes());
+
 					System.out.println("*****************************************");
 					System.out.println("[Cliente] ID de Titan a capturar:");
 					String numero = input.nextLine();
-					//mensaje a SZ "CAPTURAR"
 					mensaje = "CAPTURAR "+Integer.parseInt(numero);
 					try{
 						byte[] dattc;
@@ -222,8 +212,8 @@ public class Cliente{
 						else
 						{
 							String[] ttitann = resp.split(" ");
-							Titan tan = new Titan( ttitann[0],Integer.parseInt(ttitann[2].trim()),ttitann[1]);
-							lista.add(tan);
+							Titan tan_catch = new Titan( ttitann[0],Integer.parseInt(ttitann[2].trim()),ttitann[1],ttitann[3].trim());
+							lista_capturados.add(tan_catch);
 							System.out.println("[Cliente] Titan capturado!");
 							System.out.println("id: "+ttitann[2]);
 							System.out.println("Nombre: "+ttitann[0]);
@@ -236,14 +226,52 @@ public class Cliente{
 					}
 					break;
 				case "4":// ASESINAR TITAN
-					System.out.println("AUN NO IMPLEMENTADO ASESINAR TITAN");
+	
+					System.out.println("*****************************************");
+					System.out.println("[Cliente] ID de Titan a Asesinar:");
+					numero = input.nextLine();
+					mensaje = "ASESINAR "+Integer.parseInt(numero);
+					try{
+						byte[] dattc;
+						dattc = mensaje.getBytes("UTF-8");
+						pack = new DatagramPacket(dattc, dattc.length, addr_zone, p_zona);
+						sock = new DatagramSocket();
+						sock.send(pack);
+						//sock.close();
+						//recibir respuesta
+						dattc = new byte[packetSize];
+						pack = new DatagramPacket(dattc, dattc.length);
+						sock.receive(pack);
+						//dependiendo de la respuesta
+							//si si, agregar a lista local
+							//si no, solo imprimir
+						resp= new String(pack.getData());
+						if (resp.split(" ")[0].equals("Ups!")){
+							System.out.println("[Cliente] "+ resp);
+						}
+						else
+						{
+							String[] ttitann = resp.split(" ");
+							Titan tan_kill = new Titan( ttitann[0],Integer.parseInt(ttitann[2].trim()),ttitann[1],ttitann[3].trim());
+							lista_asesinados.add(tan_kill);
+							System.out.println("[Cliente] Titan asesinado!");
+							System.out.println("id: "+ttitann[2]);
+							System.out.println("Nombre: "+ttitann[0]);
+							System.out.println("Tipo: "+ ttitann[1]);
+							id=id+1;
+						}
+					}
+					catch(IOException e){
+						System.out.println(e.getMessage());
+					}
+
 					break;
 				case "5":// LISTAR TITANES CAPTURADOS
 					//recorrer lista local e imprimir
-					if (lista.size()>0){
+					if (lista_capturados.size()>0){
 						System.out.println("*****************************************");
 						System.out.println("[Cliente] Titanes actualmente capturados!");
-						for (Iterator<Titan> i = lista.iterator(); i.hasNext();) {
+						for (Iterator<Titan> i = lista_capturados.iterator(); i.hasNext();) {
 							System.out.println("*****");
 							Titan titt = i.next();
 							System.out.println("nombre: "+titt.nombre);
@@ -258,13 +286,30 @@ public class Cliente{
 					}
 					break;
 				case "6":// LISTAR TITANES ASESINADOS
-					System.out.println("AUN NO IMPLEMENTADO LISTAR TITANES ASESINADOS");
+					if (lista_asesinados.size()>0){
+						System.out.println("*****************************************");
+						System.out.println("[Cliente] Titanes que haz asesinado!");
+						for (Iterator<Titan> i = lista_asesinados.iterator(); i.hasNext();) {
+							System.out.println("*****");
+							Titan titt = i.next();
+							System.out.println("nombre: "+titt.nombre);
+							System.out.println("ID: "+titt.id);
+							System.out.println("Tipo: "+titt.tipo);
+						}
+						System.out.println("*****");
+					}
+					else{
+						System.out.println("*****************************************");
+						System.out.println("[Cliente] No has capturado ningun Titan!");
+					}
 					break;
+					//System.out.println("AUN NO IMPLEMENTADO LISTAR TITANES ASESINADOS");
+					//break;
 				default:
 					System.out.println("[SERVIDOR CLIENTE] COMANDO NO RECONOCIDO");
 					break;
 			}
-
+//efwy2639
 			
 		}
 

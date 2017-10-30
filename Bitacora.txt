@@ -17,11 +17,11 @@ En Servidor Cliente:  	1 (Listar Titanes):  Funciona
 						3 (Capturar Titan):
 									FUNCIONA, se arreglo el tema de id's locales
 						4 (Asesinar Titan):
-									NADA HECHO
+									Funciona
 						5 (Listar Titanes capturados):
 									FUNCIONA, se arreglo el tema de id's locales
 						6 (Listar Titanes asesinados):
-									NADA HECHO
+									Funciona
 
 
 
@@ -34,4 +34,6 @@ PROPUESTA DE ASESINADOS:
 	-> agregar un atribuo mas a la clase titan que indique si esta vivo o muerto y que de manera local en el cliente 
 	   se modifique ese atributo dependiendo de la opcion que haya marcado, en el distrito por defecto estan todos vivos.
 	-> implementar un array unico de titanes en el cliente y que para listar los capturados, busque los q estan vivos y que busque a 	   los muertos en caso de listar asesinados
+	FUNCIPNO ESTA IDEA
+	 -> ademass en el cliente se crearon 2 listas locales en donde almacena los asesinados y capturados por separado
 

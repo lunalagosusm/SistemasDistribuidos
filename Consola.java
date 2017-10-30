@@ -44,6 +44,7 @@ public class Consola extends Thread{
 								System.out.println("1.- Normal");
 								System.out.println("2.- Exentrico");
 								System.out.println("3.- Cambiante");
+								String estado = "vivo";
 								switch (sc.nextLine()){
 									case "1":
 										tipo = "Normal";
@@ -57,7 +58,7 @@ public class Consola extends Thread{
 									default:
 										tipo = "Desconocido";
 								}
-								Titan tit = new Titan(nombre,id,tipo);
+								Titan tit = new Titan(nombre,id,tipo,estado);
 								id = id + 1;
 
 								//agregar Titan a lista local

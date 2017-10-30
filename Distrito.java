@@ -25,7 +25,7 @@ public class Distrito {
 		DatagramSocket socket;
 		byte[] data; // Para datos a ser enviados en paquetes
 		int clientPort;
-		int idc;
+		int idc,ida; // id titan capturado y asesinado respectivamente
 		int packetSize = 1024;
 		int flag=0;
 		InetAddress clientAddr;
@@ -33,6 +33,7 @@ public class Distrito {
 		String s=null;
 		String peti = null;
 		String aviso=null;
+		String estado = null;
 
 		try {
 			socket = new DatagramSocket(Integer.parseInt(PtoPet));
@@ -86,7 +87,7 @@ public class Distrito {
 							break;
 						case "CAPTURAR":
 
-						 	idc = Integer.parseInt(array_msg[1].trim());
+						 	idc = Integer.parseInt(array_msg[1].trim()); //id de titan a capturar
 						 	Iterator<Titan> i = lista.iterator();
 
 						 	while (i.hasNext()) {
@@ -97,8 +98,9 @@ public class Distrito {
 						 		if (ttitann.id + 1 == idc){
 						 			flag=1;
 						 			int idtitan=+ttitann.id+1;
+						 			estado = "vivo";
 						 			//System.out.println(idtitan);
-						 			aviso = ttitann.nombre+" "+ttitann.tipo+" "+idtitan;
+						 			aviso = ttitann.nombre+" "+ttitann.tipo+" "+idtitan+" "+estado;
 						 			//eliminar
 						 			//System.out.println(aviso);
 						 			i.remove();
@@ -121,6 +123,39 @@ public class Distrito {
 
 						 	break;
 						case "ASESINAR":
+							ida = Integer.parseInt(array_msg[1].trim()); //id de titan a asesinar
+						 	i = lista.iterator();
+
+						 	while (i.hasNext()) {
+						 		Titan ttitann = i.next();
+						 		//System.out.println("for capturar");
+						 		//System.out.println(idc);
+						 		//System.out.println(ttitann.id);
+						 		if (ttitann.id + 1 == ida){
+						 			flag=1;
+						 			int idtitan=+ttitann.id+1;
+						 			estado = "muerto";
+						 			//System.out.println(idtitan);
+						 			aviso = ttitann.nombre+" "+ttitann.tipo+" "+idtitan+" "+estado;
+						 			//eliminar
+						 			//System.out.println(aviso);
+						 			i.remove();
+						 			//byte[] dataSend;
+						 			dataSend = aviso.getBytes("UTF-8");
+						 			packet = new DatagramPacket(dataSend, dataSend.length, clientAddr, clientPort);
+						 			socket.send(packet);
+						 			//mensaje al cliente 
+						 			break;
+						 		}
+						 	}
+						 	if (flag==0){
+						 		aviso = "Ups! Titan no disponible";
+						 		System.out.println("Ups! Titan no disponible");//////////////
+						 	}
+						 	else{
+						 		flag=0;
+						 		System.out.println("Han asesinado un titan de esta zona!!");//////////////
+						 	}
 							break;
 						default:
 							break;
