@@ -33,7 +33,7 @@ public class ThreadMulticast extends Thread {
                 System.out.println("[Cliente]: Aparece nuevo Titan!: "+nombre_titan+", tipo "+tipo_titan+", ID "+id_titan+".");
 
             } catch (IOException iee) {
-                System.out.println("[Cliente]: Error de direccion :" + iee.getMessage());
+                System.out.println("[Cliente]: Error = " + iee.getMessage());
                 System.exit(0);
             }
 	    }

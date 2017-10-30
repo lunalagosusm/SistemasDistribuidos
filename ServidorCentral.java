@@ -7,6 +7,17 @@ public class ServidorCentral{
 	static final int serverPort = 5000;
 	static final int packetSize = 1024;
 
+	public static boolean isNumeric(String str){  
+  		try{
+    		double d = Double.parseDouble(str);  
+  		}
+  		catch(NumberFormatException nfe)  
+  		{  
+    		return false;  
+  		}  
+  		return true;  
+	}
+
 	public static void main (String [] args){
 
 		ArrayList<Servidor> lista = new ArrayList<Servidor>();
@@ -21,7 +32,35 @@ public class ServidorCentral{
 
 		Scanner input = new Scanner(System.in);
 
-		for (int i=1; i<=2; i++){
+
+		System.out.println("[Servidor Central]: ¿Cuántos distritos desea crear?");
+		int count_distr;
+		String input_count_distr = input.nextLine();
+
+		if(isNumeric(input_count_distr)){
+			count_distr = Integer.parseInt(input_count_distr);
+			if (count_distr > 0){
+				if (count_distr>1){
+					System.out.println("[Servidor Central]: Se crearán "+count_distr+" distritos");
+				}
+				else{
+					System.out.println("[Servidor Central]: Se creará "+count_distr+" distrito");
+				}
+			}
+			else{
+				System.out.println("[Servidor Central]: No se crearán distritos.\n");
+				System.out.println("Servidor Central cerrado.\n");
+				System.exit(0);
+			}
+		}
+		else{
+			count_distr = 1;
+			System.out.println("[Servidor Central]: Entrada no reconocida.");
+			System.out.println("[Servidor Central]: Se creará "+count_distr+" distrito");
+		}
+		
+
+		for (int i=1; i<=count_distr; i++){
 			//Scanner input = new Scanner(System.in);
 	        System.out.println("*****************************************");
 	   		System.out.println("AGREGAR DISTRITO");
@@ -39,6 +78,9 @@ public class ServidorCentral{
 	   		Servidor server = new Servidor(ns_zone,ip_zone,ip_multi,port_zone,port_multicast);
 	   	 	lista.add(server); 
 		}
+
+		System.out.println("[Servidor Central]: Esperando a recibir conexiones de clientes...\n");
+
 
 		// Iterator<Servidor> itr = lista.iterator(); // imprimir nombres de arreglo de servidores
 		
@@ -71,7 +113,7 @@ public class ServidorCentral{
 						// Obtener datos del cliente para realizar eco
 					clientAddr = packet.getAddress();
 					clientPort = packet.getPort();
-					System.out.println(clientPort);
+					//System.out.println(clientPort);
 					//System.out.println("2.-NO");
 					mensaje = new String(data, 0, packet.getLength(), "UTF-8"); // nombre distrito
 

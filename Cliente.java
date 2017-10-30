@@ -31,29 +31,39 @@ public class Cliente{
 			data = nombre.getBytes("UTF-8"); // leer mensaje a enviar desde variable zona
 			packet = new DatagramPacket(data, data.length, address, Integer.parseInt(puerto));
 			socket.send(packet);
-
-
-			data = new byte[1024];//SE CAMBIO 1024 POR "ServidorCentral.packetSize""
-
+			data = new byte[1024];
 			packet = new DatagramPacket(data, data.length);
-			socket.receive(packet);
-			socket.close();
-
-			msgReturn = new String(packet.getData());
-			//if (msgReturn=="Permiso Denegado") {
-			//	System.out.println("[Cliente]: No haz sido autorizado para explorar esta zona:");
-			//}	
-
+			socket.setSoTimeout(20000);
+    			try {
+        			socket.receive(packet);
+        			socket.close();
+					msgReturn = new String(packet.getData());
+    			} catch (SocketTimeoutException ste) {
+        			System.out.println("No hubo respuesta del servidor, tiempo de conexion mayor a 20 segundos.");
+        			//System.exit(0);
+        			msgReturn="timeout";
+    			}
 
 		} catch (IOException ex) {
-			System.out.println("[Cliente]: No pudo leer mensaje :" + ex.getMessage());
-			System.exit(0);
-		}
-		// crear datagrama con datos y direccion de envio
-		
+			System.out.println("[Cliente]: Error = " + ex.getMessage());
+			//System.exit(0);
+			msgReturn="error";
+		}		
 		return msgReturn;
 	}
-	@SuppressWarnings("resource")
+
+	public static boolean isNumeric(String str){  
+  		try{
+    		double d = Double.parseDouble(str);  
+  		}
+  		catch(NumberFormatException nfe)  
+  		{  
+    		return false;  
+  		}  
+  		return true;  
+	}
+
+	@SuppressWarnings("deprecation")
 	public static void main(String args[]) throws UnknownHostException, SocketException{
 		
 		///////////
@@ -93,12 +103,25 @@ public class Cliente{
 		System.out.println("[Cliente]: Introducir Nombre de Distrito a investigar, Ej: Trost, Shiganshina:");
 		String distrito = input.nextLine(); // string con el nombre de la distrito a explorar
 
-		messageReturn = consultarZona(distrito,ip_scentral,port_scentral);
+		if(isNumeric(port_scentral)){
+			messageReturn = consultarZona(distrito,ip_scentral,port_scentral);
+		}
+		else{
+			messageReturn = "error";
+		}
 
 		String mensajedenegado = new String("Permiso Denegado");
 		
 		if (messageReturn.trim().equals(mensajedenegado)){
 			System.out.println("\nSe ha rechazado su conexion con el servidor central");
+			System.exit(0);
+		}
+		if(messageReturn.trim().equals("timeout")){
+			System.out.println("\nSe ha rechazado su conexion con el servidor central porque no hubo respuesta. Revise sus datos de acceso y ejecute otra vez el servidor de cliente.");
+			System.exit(0);
+		}
+		if(messageReturn.trim().equals("error")){
+			System.out.println("\nDatos de ingreso no válidos.");
 			System.exit(0);
 		}
 		else{
@@ -155,7 +178,7 @@ public class Cliente{
 						}
 					}
 					else{
-						System.out.println("[Cliente] No hay Titanes por capturar!");
+						System.out.println("[Cliente] No hay Titanes libres en el distrito!");
 					}
 					break;
 				case "2": // CAMBIAR DISTRITO
@@ -166,10 +189,26 @@ public class Cliente{
 					port_scentral = input.nextLine();
 					System.out.println("[Cliente]: Introducir Nombre distrito a investigar, Ej: Trost, Shiganshina:");
 					distrito = input.nextLine(); // string con el nombre del distrito a explorar
-					messageReturn = consultarZona(distrito,ip_scentral,port_scentral);
+					//messageReturn = consultarZona(distrito,ip_scentral,port_scentral);
+
+					if(isNumeric(port_scentral)){
+						messageReturn = consultarZona(distrito,ip_scentral,port_scentral);
+					}
+					else{
+						messageReturn = "error";
+					}
 
 					if (messageReturn.trim().equals("Permiso Denegado")) {
-						System.out.println("[Cliente]: No haz sido autorizado para explorar este distrito:");
+						System.out.println("[Cliente]: No haz sido autorizado para explorar este distrito.");
+						break;
+					}
+					if (messageReturn.trim().equals("timeout")) {
+						System.out.println("[Cliente]: Aún permanece en el mismo distrito.");
+						break;
+					}
+					if (messageReturn.trim().equals("error")) {
+						System.out.println("[Cliente]: Datos mal ingresados, aún permanece en el mismo distrito.");
+						break;
 					}
 					else{
 						//String[] div = messageReturn.split(" ");
@@ -201,11 +240,20 @@ public class Cliente{
 						//recibir respuesta
 						dattc = new byte[packetSize];
 						pack = new DatagramPacket(dattc, dattc.length);
-						sock.receive(pack);
+						sock.setSoTimeout(1000);
+    					try {
+        					sock.receive(pack);
+    					} catch (SocketTimeoutException ste) {
+        					System.out.println("ID titan no válido");
+        					break;
+						}
 						//dependiendo de la respuesta
 							//si si, agregar a lista local
 							//si no, solo imprimir
 						resp= new String(pack.getData());
+
+
+
 						if (resp.split(" ")[0].equals("Ups!")){
 							System.out.println("[Cliente] "+ resp);
 						}
@@ -241,10 +289,13 @@ public class Cliente{
 						//recibir respuesta
 						dattc = new byte[packetSize];
 						pack = new DatagramPacket(dattc, dattc.length);
-						sock.receive(pack);
-						//dependiendo de la respuesta
-							//si si, agregar a lista local
-							//si no, solo imprimir
+						sock.setSoTimeout(1000);
+    					try {
+        					sock.receive(pack);
+    					} catch (SocketTimeoutException ste) {
+        					System.out.println("ID titan no válido");
+        					break;
+						}
 						resp= new String(pack.getData());
 						if (resp.split(" ")[0].equals("Ups!")){
 							System.out.println("[Cliente] "+ resp);
@@ -300,7 +351,7 @@ public class Cliente{
 					}
 					else{
 						System.out.println("*****************************************");
-						System.out.println("[Cliente] No has capturado ningun Titan!");
+						System.out.println("[Cliente] No has asesinado a ningún Titan!");
 					}
 					break;
 					//System.out.println("AUN NO IMPLEMENTADO LISTAR TITANES ASESINADOS");

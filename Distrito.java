@@ -81,9 +81,6 @@ public class Distrito {
 							dataSend = aviso.getBytes("UTF-8");
 							packet = new DatagramPacket(dataSend, dataSend.length, clientAddr, clientPort);
 							socket.send(packet);
-						/*}else{
-						System.out.println("(distrito) entro al else");
-						}*/
 							break;
 						case "CAPTURAR":
 
@@ -146,6 +143,9 @@ public class Distrito {
 						 			socket.send(packet);
 						 			//mensaje al cliente 
 						 			break;
+						 		}
+						 		else{
+						 			System.out.println("NO EXISTE TAL TITAN");
 						 		}
 						 	}
 						 	if (flag==0){

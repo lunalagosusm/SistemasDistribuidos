@@ -4,7 +4,6 @@ Tarea Nueva
 10.10.2.92 cliente
 10.10.2.232 distrito
 
-“Se asume por ahora que el servidor acepta la primera conexión de un cliente.”
 
 En servidor Central:	Funciona sin hilo, hay que hacerlo mas robusto y ya puede contestar peticiones de clientes
 
