@@ -23,11 +23,8 @@ Integrantes: Pedro Luna  pluna     *
     				 -> Consola.java
 
 - La clave para acceder a todas las maquinas es "alexpedro"
-- Para compilar los codigos basta colocar en cada maquina el "comando make"
-- Para ejecutar los archivos de cada servidor, en cada maquina según corresponda se debe después de realizar make escribir la siguiente linea:
-    java Cliente.class
-    java Distrito.class
-    java ServidorCentral.clas
+- Para compilar los codigos basta colocar en cada maquina el comando "make"
+- Para ejecutar los archivos de cada servidor, en cada maquina se debe ejecutar el comando "make run".
 - Para borrar los .class basta colocar "make clean" en cada máquina.
 - El cliente se debe conectar al servidor central unicamente por el puerto 5000.
 
