@@ -2,6 +2,7 @@ import java.net.*;
 import java.io.*;
 import java.util.*;
 
+//hilo para la comunicacion Multicast
 public class ThreadMulticast extends Thread {
 
     MulticastSocket receptor; // receptor de mensajes multicast

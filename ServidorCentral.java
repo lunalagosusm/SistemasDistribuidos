@@ -2,11 +2,13 @@ import java.net.*;
 import java.io.*;
 import java.util.*;
 
+//clase que contiene la logica del servidor Central
 public class ServidorCentral{
 
 	static final int serverPort = 5000;
 	static final int packetSize = 1024;
 
+	//funcion para verificar errores
 	public static boolean isNumeric(String str){  
   		try{
     		double d = Double.parseDouble(str);  
@@ -121,8 +123,8 @@ public class ServidorCentral{
 							switch (opcion){
 								case "1":
 									System.out.println("[Servidor Central] Respuesta a "+clientAddr+" por "+mensaje+".");
-									reply = elemento.ipzona+" "+elemento.ipmult+" "+elemento.ppet+" "+elemento.pmult;
-									System.out.println("[Servidor Central] Nombre: "+mensaje+", IP Multicast: "+elemento.ipmult+", Puerto Multicast: "+elemento.pmult+",IP Peticiones: "+elemento.ipzona+", Puerto Peticiones: "+elemento.ppet);
+									reply = elemento.ipdistr+" "+elemento.ipmult+" "+elemento.ppet+" "+elemento.pmult;
+									System.out.println("[Servidor Central] Nombre: "+mensaje+", IP Multicast: "+elemento.ipmult+", Puerto Multicast: "+elemento.pmult+",IP Peticiones: "+elemento.ipdistr+", Puerto Peticiones: "+elemento.ppet);
 									data = reply.getBytes("UTF-8");
 									packet = new DatagramPacket(data, data.length, clientAddr, clientPort);
 									socket.send(packet);

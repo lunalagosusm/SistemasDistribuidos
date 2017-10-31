@@ -9,6 +9,7 @@ import java.util.Scanner;
 import java.util.Vector;
 import java.util.LinkedList;
 
+//hilo para escribir en la consola de distrito
 public class Consola extends Thread{
 	private Scanner sc = new Scanner(System.in);
 	private String address;
@@ -33,6 +34,7 @@ public class Consola extends Thread{
 			s = sc.nextLine().trim();
 			String[] frac = s.split(" ");
 			if (frac.length == 2) {
+				//case para publicar un titan en distrito
 				switch (frac[0].toString().toUpperCase()){
 					case "PUBLICAR":
 						switch (frac[1].toString().toUpperCase()){
@@ -62,7 +64,7 @@ public class Consola extends Thread{
 
 								lista.add(tit);
 
-								try{
+								try{ //se envian datos del titan publicado a todos los clientes conectados al distrito
 									String inf;
 									byte [] dato;
 									inf = nombre+" "+tipo+" "+id;
@@ -74,7 +76,7 @@ public class Consola extends Thread{
 								}
 								catch (IOException e){
 									System.out.println(e.getMessage());
-								}
+								}// mensaje a mostrar en consola de distrito
 								System.out.println("[SERVIDOR DISTRITO: "+NombreSZ+"] Se ha publicado a "+nombre);
 								System.out.println("**************");
 								System.out.println("ID: "+id);

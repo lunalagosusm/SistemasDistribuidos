@@ -2,12 +2,13 @@ import java.net.*;
 import java.io.*;
 import java.util.*;
 
+//clase que contiene la logica del servidor de Cliente
 public class Cliente{
 
-	public String[] titandato=null;
-	public String mensaje = null;
-	public int packetSize = 1024; //tamaño de paquetes a enviar
-	public String resp = null;
+	public String[] titandato;	//varible para operar con los elementos de las listas de titanes
+	public String mensaje;	//variable para la comunicación por soket
+	public int packetSize;	//tamaño de paquetes a enviar
+	public String resp;	//variable para la respuesta por socket
 	public LinkedList<Titan> lista_capturados; //almacena los titanes capturados
 	public LinkedList<Titan> lista_asesinados; //almacena los titanes asesinados
 	public int id; // id para titanes
@@ -17,15 +18,11 @@ public class Cliente{
 
 		DatagramSocket socket; // para enviar datos
 		DatagramPacket packet; // lo que se envia
-
 		InetAddress address; //dirección ip del socket a utilizar
+		byte[] data = null; //variable a enviar en la comunicacion por socket
+		String msgReturn = null; //variable para almacenar la respuesta del socket
 
-		//int p_distr,p_multicast;
-
-		byte[] data = null;
-
-		String msgReturn = null;
-
+		//El siguiente codigo realiza la comunicación
 		try {
 			address = InetAddress.getByName(direccion);
 			socket = new DatagramSocket();
@@ -34,14 +31,13 @@ public class Cliente{
 			socket.send(packet); //se envia la información
 			data = new byte[1024];
 			packet = new DatagramPacket(data, data.length);
-			socket.setSoTimeout(20000);
+			socket.setSoTimeout(20000);	//si no hay respuesta del socket consultado, a los 20 segundos se retorna un mensaje con "timeout"
     			try {
         			socket.receive(packet);
         			socket.close();
 					msgReturn = new String(packet.getData());
     			} catch (SocketTimeoutException ste) {
         			System.out.println("No hubo respuesta del servidor, tiempo de conexion mayor a 20 segundos.");
-        			//System.exit(0);
         			msgReturn="timeout";
     			}
 
@@ -53,6 +49,7 @@ public class Cliente{
 		return msgReturn;
 	}
 
+	//funcion para mejorar la robustes al ingresar puertos y algunas consultas del codigo
 	public static boolean isNumeric(String str){  
   		try{
     		double d = Double.parseDouble(str);  
@@ -67,18 +64,17 @@ public class Cliente{
 	@SuppressWarnings("deprecation")
 	public static void main(String args[]) throws UnknownHostException, SocketException{
 		
-
+		//se inicializan variables declaradas mas arriba
 		String[] titandato=null;
 		String mensaje = null;
 		int packetSize = 1024;
 		String resp=null;
 		LinkedList<Titan> lista_capturados = new LinkedList<Titan>();
 		LinkedList<Titan> lista_asesinados = new LinkedList<Titan>();
-		int id;
+		int id = 0;
 
 		DatagramPacket pack;
 		DatagramSocket sock;
-		id = 0;
 
 		InetAddress address,addr_distrito,addr_mult; // Hacia donde enviar y recibir
 		int p_distr,p_multicast; // puertos de servidor distr y multicast
@@ -95,6 +91,7 @@ public class Cliente{
 		System.out.println("[Cliente]: Introducir Nombre de Distrito a investigar, Ej: Trost, Shiganshina:");
 		String distrito = input.nextLine(); // string con el nombre de la distrito a explorar
 
+		//se comprueba si hay error al ingresar el puerto
 		if(isNumeric(port_scentral)){
 			messageReturn = consultarDistrito(distrito,ip_scentral,port_scentral);
 		}
@@ -102,24 +99,32 @@ public class Cliente{
 			messageReturn = "error";
 		}
 
+		//Si se niego la conexion desde el servidor central
 		String mensajedenegado = new String("Permiso Denegado");
 		
 		if (messageReturn.trim().equals(mensajedenegado)){
 			System.out.println("\nSe ha rechazado su conexion con el servidor central");
 			System.exit(0);
 		}
-		if(messageReturn.trim().equals("timeout")){
+
+		//si no hay respuesta desde el socket
+		else if(messageReturn.trim().equals("timeout")){
 			System.out.println("\nSe ha rechazado su conexion con el servidor central porque no hubo respuesta. Revise sus datos de acceso y ejecute otra vez el servidor de cliente.");
 			System.exit(0);
 		}
-		if(messageReturn.trim().equals("error")){
+
+		//si hay un error al ingresar los datos de conexion
+		else if(messageReturn.trim().equals("error")){
 			System.out.println("\nDatos de ingreso no validos.");
 			System.exit(0);
 		}
+
+		//si la conecxion se realiza correctamente y sin errores
 		else{
 			System.out.println("\nConexion autorizada por el servidor central");
 		}
 
+		//se leen los datos de la respuesta del servidor
 		String[] div = messageReturn.split(" "); 
 
 		addr_mult = InetAddress.getByName(div[1].trim());
@@ -127,10 +132,13 @@ public class Cliente{
 		p_distr = Integer.parseInt(div[2].trim());
 		p_multicast = Integer.parseInt(div[3].trim());
 
+		//hilo para escuchar permanentemete si el cliente recibe un mensaje por multicast
 		ThreadMulticast escuchar = new ThreadMulticast(p_multicast,addr_mult); 
 		escuchar.start();
 
 		for (; ; ) {
+
+			//opciones cliente
 			System.out.println("*****************************************");
 			System.out.println("[Cliente] CONSOLA");
 			System.out.println("[Cliente] (1) Listar Titanes en Distrito");
@@ -145,12 +153,14 @@ public class Cliente{
 			switch (input.nextLine()){
 				case "1": //LISTAR TITANES DEL DISTRITO
 					mensaje = "LISTAR";
+					//se abre un socket a treaves del siguiente hilo para la comunicación entre cilente y distrito
 					ThreadDatagramS escuchar2 = new ThreadDatagramS(p_distr,addr_distrito);
-					escuchar2.start();	
+					escuchar2.start();
 					messageReturnDistrito = consultarDistrito(mensaje,div[0].trim(),div[2].trim());
 					escuchar2.stop();
 					escuchar2 = new ThreadDatagramS(p_distr,addr_distrito); 
 					escuchar2.start();
+					//se recupera la respuesta del distrito y se imprimen los titanes disponibles
 					resp = messageReturnDistrito;
 					String[] titn = resp.split(":");
 					int largo = titn.length-1;
@@ -171,15 +181,16 @@ public class Cliente{
 					}
 					break;
 				case "2": // CAMBIAR DISTRITO
+					//se ingresan los datos del distrito a conectarse
 					System.out.println("*****************************************");
 					System.out.println("[Cliente]: Ingresar IP Servidor Central:");
-					ip_scentral = input.nextLine();
+					ip_scentral = input.nextLine(); // string con la direccion del servidor central
 					System.out.println("[Cliente]: Ingresar Puerto Servidor Central:");
-					port_scentral = input.nextLine();
+					port_scentral = input.nextLine(); /// string con el puerto del servidor central
 					System.out.println("[Cliente]: Introducir Nombre distrito a investigar, Ej: Trost, Shiganshina:");
 					distrito = input.nextLine(); // string con el nombre del distrito a explorar
-					//messageReturn = consultarDistrito(distrito,ip_scentral,port_scentral);
 
+					//verificacion de puerto
 					if(isNumeric(port_scentral)){
 						messageReturn = consultarDistrito(distrito,ip_scentral,port_scentral);
 					}
@@ -187,18 +198,22 @@ public class Cliente{
 						messageReturn = "error";
 					}
 
+					//si se rechaza la conexion
 					if (messageReturn.trim().equals("Permiso Denegado")) {
 						System.out.println("[Cliente]: No haz sido autorizado para explorar este distrito.");
 						break;
 					}
-					if (messageReturn.trim().equals("timeout")) {
+					//si no hay respuesta del servidor central
+					else if (messageReturn.trim().equals("timeout")) {
 						System.out.println("[Cliente]: Aun permanece en el mismo distrito.");
 						break;
 					}
-					if (messageReturn.trim().equals("error")) {
+					//si se produce un error al ingresar los datos
+					else if (messageReturn.trim().equals("error")) {
 						System.out.println("[Cliente]: Datos mal ingresados, aun permanece en el mismo distrito.");
 						break;
 					}
+					//en caso de ningun error o conexion rechazada
 					else{
 						div = messageReturn.split(" ");
 						addr_mult = InetAddress.getByName(div[1].trim());
@@ -213,90 +228,105 @@ public class Cliente{
 
 					break;
 				case "3":// CAPTURAR TITAN
-
+					//se recibe el ID del titan a capturar
 					System.out.println("*****************************************");
 					System.out.println("[Cliente] ID de Titan a capturar:");
 					String numero = input.nextLine();
-					mensaje = "CAPTURAR "+Integer.parseInt(numero);
-					try{
-						byte[] dattc;
-						dattc = mensaje.getBytes("UTF-8");
-						pack = new DatagramPacket(dattc, dattc.length, addr_distrito, p_distr);
-						sock = new DatagramSocket();
-						sock.send(pack);
-						dattc = new byte[packetSize];
-						pack = new DatagramPacket(dattc, dattc.length);
-						sock.setSoTimeout(1000);
-    					try {
-        					sock.receive(pack);
-    					} catch (SocketTimeoutException ste) {
-        					System.out.println("ID titan no valido");
-        					break;
-						}
-						resp= new String(pack.getData());
 
-						if (resp.split(" ")[0].equals("Ups!")){
-							System.out.println("[Cliente] "+ resp);
+					//se verifica que el id ingresado sea un numero
+					if(isNumeric(numero)){
+						mensaje = "CAPTURAR "+Integer.parseInt(numero);
+						try{
+							byte[] dattc;
+							dattc = mensaje.getBytes("UTF-8");
+							pack = new DatagramPacket(dattc, dattc.length, addr_distrito, p_distr);
+							sock = new DatagramSocket();
+							sock.send(pack);
+							dattc = new byte[packetSize];
+							pack = new DatagramPacket(dattc, dattc.length);
+							sock.setSoTimeout(1000);
+    						try {
+        						sock.receive(pack); //si no hay problemas con id de titan
+    						} catch (SocketTimeoutException ste) {
+        						System.out.println("ID titan no valido");//si el id no corresponde a un titan libre
+        						break;
+							}
+							resp= new String(pack.getData());
+
+							if (resp.split(" ")[0].equals("Ups!")){
+								System.out.println("[Cliente] "+ resp);
+							}
+							else //se imprimen datos del titan capturado
+							{
+								String[] ttitann = resp.split(" ");
+								Titan tan_catch = new Titan( ttitann[0],Integer.parseInt(ttitann[2].trim()),ttitann[1],ttitann[3].trim());
+								lista_capturados.add(tan_catch);
+								System.out.println("[Cliente] Titan capturado!");
+								System.out.println("id: "+ttitann[2]);
+								System.out.println("Nombre: "+ttitann[0]);
+								System.out.println("Tipo: "+ ttitann[1]);
+								id=id+1;
+							}
 						}
-						else
-						{
-							String[] ttitann = resp.split(" ");
-							Titan tan_catch = new Titan( ttitann[0],Integer.parseInt(ttitann[2].trim()),ttitann[1],ttitann[3].trim());
-							lista_capturados.add(tan_catch);
-							System.out.println("[Cliente] Titan capturado!");
-							System.out.println("id: "+ttitann[2]);
-							System.out.println("Nombre: "+ttitann[0]);
-							System.out.println("Tipo: "+ ttitann[1]);
-							id=id+1;
+						catch(IOException e){
+							System.out.println(e.getMessage());
 						}
 					}
-					catch(IOException e){
-						System.out.println(e.getMessage());
+					else{
+						System.out.println("ID titan no valido");
+						break;
 					}
 					break;
 				case "4":// ASESINAR TITAN
-	
+					//se recibe el ID del titan a capturar
 					System.out.println("*****************************************");
 					System.out.println("[Cliente] ID de Titan a Asesinar:");
 					numero = input.nextLine();
-					mensaje = "ASESINAR "+Integer.parseInt(numero);
-					try{
-						byte[] dattc;
-						dattc = mensaje.getBytes("UTF-8");
-						pack = new DatagramPacket(dattc, dattc.length, addr_distrito, p_distr);
-						sock = new DatagramSocket();
-						sock.send(pack);
-						dattc = new byte[packetSize];
-						pack = new DatagramPacket(dattc, dattc.length);
-						sock.setSoTimeout(1000);
-    					try {
-        					sock.receive(pack);
-    					} catch (SocketTimeoutException ste) {
-        					System.out.println("ID titan no valido");
-        					break;
+					//se verifica que el id ingresado sea un numero
+					if(isNumeric(numero)){
+						mensaje = "ASESINAR "+Integer.parseInt(numero);
+						try{
+							byte[] dattc;
+							dattc = mensaje.getBytes("UTF-8");
+							pack = new DatagramPacket(dattc, dattc.length, addr_distrito, p_distr);
+							sock = new DatagramSocket();
+							sock.send(pack);
+							dattc = new byte[packetSize];
+							pack = new DatagramPacket(dattc, dattc.length);
+							sock.setSoTimeout(1000);
+    						try {
+        						sock.receive(pack);//si no hay problemas con id de titan
+    						} catch (SocketTimeoutException ste) {
+        						System.out.println("ID titan no valido");//si el id no corresponde a un titan libre
+        						break;
+							}
+							resp= new String(pack.getData());
+							if (resp.split(" ")[0].equals("Ups!")){
+								System.out.println("[Cliente] "+ resp);
+							}
+							else //se imprimen datos del titan capturado
+							{
+								String[] ttitann = resp.split(" ");
+								Titan tan_kill = new Titan( ttitann[0],Integer.parseInt(ttitann[2].trim()),ttitann[1],ttitann[3].trim());
+								lista_asesinados.add(tan_kill);
+								System.out.println("[Cliente] Titan asesinado!");
+								System.out.println("id: "+ttitann[2]);
+								System.out.println("Nombre: "+ttitann[0]);
+								System.out.println("Tipo: "+ ttitann[1]);
+								id=id+1;
 						}
-						resp= new String(pack.getData());
-						if (resp.split(" ")[0].equals("Ups!")){
-							System.out.println("[Cliente] "+ resp);
 						}
-						else
-						{
-							String[] ttitann = resp.split(" ");
-							Titan tan_kill = new Titan( ttitann[0],Integer.parseInt(ttitann[2].trim()),ttitann[1],ttitann[3].trim());
-							lista_asesinados.add(tan_kill);
-							System.out.println("[Cliente] Titan asesinado!");
-							System.out.println("id: "+ttitann[2]);
-							System.out.println("Nombre: "+ttitann[0]);
-							System.out.println("Tipo: "+ ttitann[1]);
-							id=id+1;
+						catch(IOException e){
+							System.out.println(e.getMessage());
 						}
 					}
-					catch(IOException e){
-						System.out.println(e.getMessage());
+					else{
+						System.out.println("ID titan no valido");
+						break;
 					}
-
 					break;
 				case "5":// LISTAR TITANES CAPTURADOS
+					//en caso de haber algun titan capturado
 					if (lista_capturados.size()>0){
 						System.out.println("*****************************************");
 						System.out.println("[Cliente] Titanes actualmente capturados!");
@@ -309,12 +339,13 @@ public class Cliente{
 						}
 						System.out.println("*****");
 					}
-					else{
+					else{ //en caso de no haber un titan caputado
 						System.out.println("*****************************************");
 						System.out.println("[Cliente] No has capturado ningun Titan!");
 					}
 					break;
 				case "6":// LISTAR TITANES ASESINADOS
+					//en caso de haber algun titan asesinado
 					if (lista_asesinados.size()>0){
 						System.out.println("*****************************************");
 						System.out.println("[Cliente] Titanes que haz asesinado!");
@@ -327,7 +358,8 @@ public class Cliente{
 						}
 						System.out.println("*****");
 					}
-					else{
+					else{ //en caso de no haber algun titan capturado
+
 						System.out.println("*****************************************");
 						System.out.println("[Cliente] No has asesinado a ningun Titan!");
 					}

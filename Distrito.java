@@ -2,11 +2,13 @@ import java.net.*;
 import java.io.*;
 import java.util.*;
 
+//clase que contiene la lógica del servidor de distrito
 public class Distrito {
 	private static Scanner sc;
 	public static void main (String[] args) throws IOException {
 		sc = new Scanner (System.in);
 		LinkedList<Titan> lista = new LinkedList<Titan>();
+		//Datos de conexion a distrito
 		System.out.println("[SERVIDOR Distrito] Nombre Servidor:");
 		String nombre = sc.nextLine();
 		System.out.println("[SERVIDOR DISTRITO:"+nombre+"] IP Multicast:");
@@ -18,9 +20,11 @@ public class Distrito {
 		System.out.println("[SERVIDOR DISTRITO:"+nombre+"] Puerto Peticiones:");
 		String PtoPet = sc.nextLine();
 		
+		//hilo que ejecuta las opciones de la consola de distrito
 		Consola hilo = new Consola(lista, addrMulti, Integer.parseInt(PtoMulti), nombre);
 		hilo.start();
 
+		//variables para el socket entre el distrito y cliente
 		DatagramPacket packet;
 		DatagramSocket socket;
 		byte[] data; // Para datos a ser enviados en paquetes
@@ -48,11 +52,11 @@ public class Distrito {
 					socket.receive(packet);
 				} 
 				catch (IOException ie) {
-					System.out.println("[Distrito]: No se pudo recibir (primer try):" + ie.getMessage());
+					System.out.println("[Distrito]: No se pudo recibir:" + ie.getMessage());
 					continue;
 				}
 
-				try {
+				try { // codigo para las consultas del cliente al distrito
 					aviso = "";
 					clientAddr = packet.getAddress();
 					clientPort = packet.getPort();
@@ -61,7 +65,7 @@ public class Distrito {
 					byte[] dataSend;
 
 					switch (array_msg[0]){
-						case "LISTAR": //LISTAR TITANES DEL DISTRITO
+						case "LISTAR": //LOGICA PARA LISTAR TITANES DEL DISTRITO
 
 							for (Iterator<Titan> i = lista.iterator(); i.hasNext();) {
 								Titan ttitann = i.next();
@@ -72,7 +76,7 @@ public class Distrito {
 							packet = new DatagramPacket(dataSend, dataSend.length, clientAddr, clientPort);
 							socket.send(packet);
 							break;
-						case "CAPTURAR":
+						case "CAPTURAR": //LOGICA PARA CAPTURAR TITANES DEL DISTRITO
 
 						 	idc = Integer.parseInt(array_msg[1].trim()); //id de titan a capturar
 						 	Iterator<Titan> i = lista.iterator();
@@ -102,7 +106,7 @@ public class Distrito {
 						 	}
 
 						 	break;
-						case "ASESINAR":
+						case "ASESINAR": //LOGICA PARA ASESINAR TITANES DEL DISTRITO
 							ida = Integer.parseInt(array_msg[1].trim()); //id de titan a asesinar
 						 	i = lista.iterator();
 

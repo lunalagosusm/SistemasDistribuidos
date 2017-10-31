@@ -2,6 +2,8 @@ import java.net.*;
 import java.io.*;
 import java.util.*;
 
+//hilo para la comunicacion Unicast
+
 public class ThreadDatagramS extends Thread {
 
     DatagramSocket rcptr; // rcptr de mensajes multicast
