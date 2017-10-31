@@ -8,7 +8,7 @@ public class ThreadMulticast extends Thread {
 
     //private boolean continue = true;
     InetAddress addr_mult; // Hacia donde enviar y recibir
-    int p_multicast; // puertos de servidor zona y multicast
+    int p_multicast; // puertos de servidor distr y multicast
     String msgmulti; // lo que se obtiene del servidor
     byte[] datamult; // buffer para mensaje multicast
 

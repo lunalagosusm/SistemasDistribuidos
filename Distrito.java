@@ -115,7 +115,7 @@ public class Distrito {
 						 	}
 						 	else{
 						 		flag=0;
-						 		System.out.println("Han capturado un titan de esta zona!!");//////////////
+						 		System.out.println("Han capturado un titan de este distrito!!");//////////////
 						 	}
 
 						 	break;
@@ -154,7 +154,7 @@ public class Distrito {
 						 	}
 						 	else{
 						 		flag=0;
-						 		System.out.println("Han asesinado un titan de esta zona!!");//////////////
+						 		System.out.println("Han asesinado un titan de este distrito!!");//////////////
 						 	}
 							break;
 						default:

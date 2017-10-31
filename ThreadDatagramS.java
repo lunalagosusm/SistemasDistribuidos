@@ -6,7 +6,7 @@ public class ThreadDatagramS extends Thread {
 
     DatagramSocket rcptr; // rcptr de mensajes multicast
     InetAddress addr_pet; // Hacia donde enviar y recibir
-    int p_pet; // puertos de servidor zona y multicast
+    int p_pet; // puertos de servidor distr y multicast
     String msgpet; // lo que se obtiene del servidor
     byte[] datapet; // buffer para mensaje multicast
 

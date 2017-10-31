@@ -6,20 +6,21 @@ public class Cliente{
 
 	public String[] titandato=null;
 	public String mensaje = null;
-	public int packetSize = 1024;
-	public String resp=null;
-	public LinkedList<Titan> lista_capturados;
-	public LinkedList<Titan> lista_asesinados;
-	public int id;
-	///////////
-	public static String consultarZona(String nombre,String direccion, String puerto){
+	public int packetSize = 1024; //tamaño de paquetes a enviar
+	public String resp = null;
+	public LinkedList<Titan> lista_capturados; //almacena los titanes capturados
+	public LinkedList<Titan> lista_asesinados; //almacena los titanes asesinados
+	public int id; // id para titanes
+	
+	//consultarDistrito sirve para que el cliente se pueda comunicar con el distrito al que esta conectado
+	public static String consultarDistrito(String nombre,String direccion, String puerto){
 
 		DatagramSocket socket; // para enviar datos
 		DatagramPacket packet; // lo que se envia
 
-		InetAddress address,addr_zone,addr_mult;;
+		InetAddress address; //dirección ip del socket a utilizar
 
-		int p_zona,p_multicast;
+		//int p_distr,p_multicast;
 
 		byte[] data = null;
 
@@ -28,9 +29,9 @@ public class Cliente{
 		try {
 			address = InetAddress.getByName(direccion);
 			socket = new DatagramSocket();
-			data = nombre.getBytes("UTF-8"); // leer mensaje a enviar desde variable zona
+			data = nombre.getBytes("UTF-8"); // leer mensaje a enviar desde variable distr
 			packet = new DatagramPacket(data, data.length, address, Integer.parseInt(puerto));
-			socket.send(packet);
+			socket.send(packet); //se envia la información
 			data = new byte[1024];
 			packet = new DatagramPacket(data, data.length);
 			socket.setSoTimeout(20000);
@@ -87,8 +88,8 @@ public class Cliente{
 		id = 0;
 		//////////////
 
-		InetAddress address,addr_zone,addr_mult; // Hacia donde enviar y recibir
-		int p_zona,p_multicast; // puertos de servidor zona y multicast
+		InetAddress address,addr_distrito,addr_mult; // Hacia donde enviar y recibir
+		int p_distr,p_multicast; // puertos de servidor distr y multicast
 		String messageReturn,msgmulti,messageReturnDistrito; // lo que se obtiene del servidor
 		byte[] data = null; // buffer para el mensaje a enviar
 		//byte[] datamult; // buffer para mensaje multicast
@@ -104,7 +105,7 @@ public class Cliente{
 		String distrito = input.nextLine(); // string con el nombre de la distrito a explorar
 
 		if(isNumeric(port_scentral)){
-			messageReturn = consultarZona(distrito,ip_scentral,port_scentral);
+			messageReturn = consultarDistrito(distrito,ip_scentral,port_scentral);
 		}
 		else{
 			messageReturn = "error";
@@ -121,7 +122,7 @@ public class Cliente{
 			System.exit(0);
 		}
 		if(messageReturn.trim().equals("error")){
-			System.out.println("\nDatos de ingreso no válidos.");
+			System.out.println("\nDatos de ingreso no validos.");
 			System.exit(0);
 		}
 		else{
@@ -131,8 +132,8 @@ public class Cliente{
 		String[] div = messageReturn.split(" "); 
 
 		addr_mult = InetAddress.getByName(div[1].trim());
-		addr_zone = InetAddress.getByName(div[0].trim());
-		p_zona = Integer.parseInt(div[2].trim());
+		addr_distrito = InetAddress.getByName(div[0].trim());
+		p_distr = Integer.parseInt(div[2].trim());
 		p_multicast = Integer.parseInt(div[3].trim());
 
 		ThreadMulticast escuchar = new ThreadMulticast(p_multicast,addr_mult); 
@@ -153,11 +154,11 @@ public class Cliente{
 			switch (input.nextLine()){
 				case "1": //LISTAR TITANES DEL DISTRITO
 					mensaje = "LISTAR";
-					ThreadDatagramS escuchar2 = new ThreadDatagramS(p_zona,addr_zone);
+					ThreadDatagramS escuchar2 = new ThreadDatagramS(p_distr,addr_distrito);
 					escuchar2.start();	
-					messageReturnDistrito = consultarZona(mensaje,div[0].trim(),div[2].trim());
+					messageReturnDistrito = consultarDistrito(mensaje,div[0].trim(),div[2].trim());
 					escuchar2.stop();
-					escuchar2 = new ThreadDatagramS(p_zona,addr_zone); 
+					escuchar2 = new ThreadDatagramS(p_distr,addr_distrito); 
 					escuchar2.start();
 					resp = messageReturnDistrito;
 					//System.out.println(resp);
@@ -189,10 +190,10 @@ public class Cliente{
 					port_scentral = input.nextLine();
 					System.out.println("[Cliente]: Introducir Nombre distrito a investigar, Ej: Trost, Shiganshina:");
 					distrito = input.nextLine(); // string con el nombre del distrito a explorar
-					//messageReturn = consultarZona(distrito,ip_scentral,port_scentral);
+					//messageReturn = consultarDistrito(distrito,ip_scentral,port_scentral);
 
 					if(isNumeric(port_scentral)){
-						messageReturn = consultarZona(distrito,ip_scentral,port_scentral);
+						messageReturn = consultarDistrito(distrito,ip_scentral,port_scentral);
 					}
 					else{
 						messageReturn = "error";
@@ -203,19 +204,19 @@ public class Cliente{
 						break;
 					}
 					if (messageReturn.trim().equals("timeout")) {
-						System.out.println("[Cliente]: Aún permanece en el mismo distrito.");
+						System.out.println("[Cliente]: Aun permanece en el mismo distrito.");
 						break;
 					}
 					if (messageReturn.trim().equals("error")) {
-						System.out.println("[Cliente]: Datos mal ingresados, aún permanece en el mismo distrito.");
+						System.out.println("[Cliente]: Datos mal ingresados, aun permanece en el mismo distrito.");
 						break;
 					}
 					else{
 						//String[] div = messageReturn.split(" ");
 						div = messageReturn.split(" ");
 						addr_mult = InetAddress.getByName(div[1].trim());
-						addr_zone = InetAddress.getByName(div[0].trim());
-						p_zona = Integer.parseInt(div[2].trim());
+						addr_distrito = InetAddress.getByName(div[0].trim());
+						p_distr = Integer.parseInt(div[2].trim());
 						p_multicast = Integer.parseInt(div[3].trim());
 
 						escuchar.stop();
@@ -233,7 +234,7 @@ public class Cliente{
 					try{
 						byte[] dattc;
 						dattc = mensaje.getBytes("UTF-8");
-						pack = new DatagramPacket(dattc, dattc.length, addr_zone, p_zona);
+						pack = new DatagramPacket(dattc, dattc.length, addr_distrito, p_distr);
 						sock = new DatagramSocket();
 						sock.send(pack);
 						//sock.close();
@@ -244,7 +245,7 @@ public class Cliente{
     					try {
         					sock.receive(pack);
     					} catch (SocketTimeoutException ste) {
-        					System.out.println("ID titan no válido");
+        					System.out.println("ID titan no valido");
         					break;
 						}
 						//dependiendo de la respuesta
@@ -282,7 +283,7 @@ public class Cliente{
 					try{
 						byte[] dattc;
 						dattc = mensaje.getBytes("UTF-8");
-						pack = new DatagramPacket(dattc, dattc.length, addr_zone, p_zona);
+						pack = new DatagramPacket(dattc, dattc.length, addr_distrito, p_distr);
 						sock = new DatagramSocket();
 						sock.send(pack);
 						//sock.close();
@@ -293,7 +294,7 @@ public class Cliente{
     					try {
         					sock.receive(pack);
     					} catch (SocketTimeoutException ste) {
-        					System.out.println("ID titan no válido");
+        					System.out.println("ID titan no valido");
         					break;
 						}
 						resp= new String(pack.getData());
@@ -351,7 +352,7 @@ public class Cliente{
 					}
 					else{
 						System.out.println("*****************************************");
-						System.out.println("[Cliente] No has asesinado a ningún Titan!");
+						System.out.println("[Cliente] No has asesinado a ningun Titan!");
 					}
 					break;
 					//System.out.println("AUN NO IMPLEMENTADO LISTAR TITANES ASESINADOS");

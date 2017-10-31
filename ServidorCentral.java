@@ -33,7 +33,7 @@ public class ServidorCentral{
 		Scanner input = new Scanner(System.in);
 
 
-		System.out.println("[Servidor Central]: ¿Cuántos distritos desea crear?");
+		System.out.println("[Servidor Central]: Cuantos distritos desea crear?");
 		int count_distr;
 		String input_count_distr = input.nextLine();
 
@@ -41,14 +41,14 @@ public class ServidorCentral{
 			count_distr = Integer.parseInt(input_count_distr);
 			if (count_distr > 0){
 				if (count_distr>1){
-					System.out.println("[Servidor Central]: Se crearán "+count_distr+" distritos");
+					System.out.println("[Servidor Central]: Se crearan "+count_distr+" distritos");
 				}
 				else{
-					System.out.println("[Servidor Central]: Se creará "+count_distr+" distrito");
+					System.out.println("[Servidor Central]: Se creara "+count_distr+" distrito");
 				}
 			}
 			else{
-				System.out.println("[Servidor Central]: No se crearán distritos.\n");
+				System.out.println("[Servidor Central]: No se crearan distritos.\n");
 				System.out.println("Servidor Central cerrado.\n");
 				System.exit(0);
 			}
@@ -56,7 +56,7 @@ public class ServidorCentral{
 		else{
 			count_distr = 1;
 			System.out.println("[Servidor Central]: Entrada no reconocida.");
-			System.out.println("[Servidor Central]: Se creará "+count_distr+" distrito");
+			System.out.println("[Servidor Central]: Se creara "+count_distr+" distrito");
 		}
 		
 
@@ -65,17 +65,17 @@ public class ServidorCentral{
 	        System.out.println("*****************************************");
 	   		System.out.println("AGREGAR DISTRITO");
 	   		System.out.println("[Servidor Central]: Nombre Distrito:");
-	   		String ns_zone = input.nextLine();
+	   		String ns_distrito = input.nextLine();
 	   		System.out.println("[Servidor Central]: IP Multicast:");
 	   		String ip_multi = input.nextLine();
 	   		System.out.println("[Servidor Central]: IP Peticiones:");
-	   		String ip_zone = input.nextLine();
+	   		String ip_distrito = input.nextLine();
 	   		System.out.println("[Servidor Central]: Puerto Peticiones:");
-	   		String port_zone = input.nextLine();
+	   		String port_distrito = input.nextLine();
 	   		System.out.println("[Servidor Central]: Puerto Multicast:");
 	   		String port_multicast = input.nextLine();
 
-	   		Servidor server = new Servidor(ns_zone,ip_zone,ip_multi,port_zone,port_multicast);
+	   		Servidor server = new Servidor(ns_distrito,ip_distrito,ip_multi,port_distrito,port_multicast);
 	   	 	lista.add(server); 
 		}
 
@@ -133,9 +133,9 @@ public class ServidorCentral{
 							switch (opcion){
 								case "1":
 									System.out.println("[Servidor Central] Respuesta a "+clientAddr+" por "+mensaje+".");
-									reply = elemento.ipzona+" "+elemento.ipmult+" "+elemento.ppet+" "+elemento.pmult;
+									reply = elemento.ipdistr+" "+elemento.ipmult+" "+elemento.ppet+" "+elemento.pmult;
 									//System.out.println(reply);
-									System.out.println("[Servidor Central] Nombre: "+mensaje+", IP Multicast: "+elemento.ipmult+", Puerto Multicast: "+elemento.pmult+",IP Peticiones: "+elemento.ipzona+", Puerto Peticiones: "+elemento.ppet);
+									System.out.println("[Servidor Central] Nombre: "+mensaje+", IP Multicast: "+elemento.ipmult+", Puerto Multicast: "+elemento.pmult+",IP Peticiones: "+elemento.ipdistr+", Puerto Peticiones: "+elemento.ppet);
 									//System.out.println(clientPort);
 									data = reply.getBytes("UTF-8");
 									packet = new DatagramPacket(data, data.length, clientAddr, clientPort);
@@ -149,11 +149,11 @@ public class ServidorCentral{
 									data = reply.getBytes("UTF-8");
 									packet = new DatagramPacket(data, data.length, clientAddr, clientPort);
 									socket.send(packet);
-									//menu = new ThreadMenu(zonas);
+									//menu = new ThreadMenu(distrs);
 									//input_op = null;
 									break;
 								default:
-									System.out.println("[Servidor Central]:Opcion Invalida, se rechazará la conexión.");
+									System.out.println("[Servidor Central]:Opcion Invalida, se rechazara la conexion.");
 									System.out.println("[Servidor Central]:No haz autorizado a "+clientAddr);
 									reply = "Permiso Denegado";
 									data = reply.getBytes("UTF-8");
