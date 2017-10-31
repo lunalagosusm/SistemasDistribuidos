@@ -20,8 +20,8 @@ public class ThreadMenu extends Thread {
 
 		while (continuar) {
 
-			Scanner input = new Scanner(System.in);
-            System.out.println("*****************************************");
+			  Scanner input = new Scanner(System.in);
+        System.out.println("*****************************************");
    			System.out.println("AGREGAR DISTRITO");
    			System.out.println("[Servidor Central]: Nombre Distrito:");
    			String ns_zone = input.nextLine();

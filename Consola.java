@@ -11,12 +11,11 @@ import java.util.LinkedList;
 
 public class Consola extends Thread{
 	private Scanner sc = new Scanner(System.in);
-	//private Vector<int> vec;
 	private String address;
 	public LinkedList<Titan> lista;
 	private String NombreSZ;
 	private int puertoM;
-	private String s;//=null;
+	private String s;
 	public int id;
 	public String nombre;
 	public String tipo;
@@ -61,10 +60,8 @@ public class Consola extends Thread{
 								Titan tit = new Titan(nombre,id,tipo,estado);
 								id = id + 1;
 
-								//agregar Titan a lista local
 								lista.add(tit);
-								//
-								//mandar aviso por multicast
+
 								try{
 									String inf;
 									byte [] dato;
