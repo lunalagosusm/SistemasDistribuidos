@@ -81,14 +81,6 @@ public class ServidorCentral{
 
 		System.out.println("[Servidor Central]: Esperando a recibir conexiones de clientes...\n");
 
-
-		// Iterator<Servidor> itr = lista.iterator(); // imprimir nombres de arreglo de servidores
-		
-		// while(itr.hasNext()){
-		// 	Servidor elemento = itr.next();
-		// 	System.out.print(elemento.nombre+" / ");
-		// }
-
 		try {
 			
 			socket = new DatagramSocket(serverPort);
@@ -96,7 +88,6 @@ public class ServidorCentral{
 			for (;;){
 
 				data = new byte[ServidorCentral.packetSize];
-				// Crear paquete para recibir mensajes
 				packet = new DatagramPacket(data, packetSize);
 
 				try {
@@ -113,8 +104,6 @@ public class ServidorCentral{
 						// Obtener datos del cliente para realizar eco
 					clientAddr = packet.getAddress();
 					clientPort = packet.getPort();
-					//System.out.println(clientPort);
-					//System.out.println("2.-NO");
 					mensaje = new String(data, 0, packet.getLength(), "UTF-8"); // nombre distrito
 
 					Iterator<Servidor>itr = lista.iterator();
@@ -124,7 +113,6 @@ public class ServidorCentral{
 						if (mensaje.equals(elemento.nombre)) {
 						
 							System.out.println("[Servidor Central]: Dar autorizacion a "+ clientAddr + " por Distrito "+ mensaje + "?.");
-							//System.out.println("NOTA: Debes contestar la pregunta anterior, antes de dar autorizacion");
 							System.out.println("1.-SI");	
 							System.out.println("2.-NO");
 							String opcion = input.nextLine();
@@ -133,14 +121,11 @@ public class ServidorCentral{
 							switch (opcion){
 								case "1":
 									System.out.println("[Servidor Central] Respuesta a "+clientAddr+" por "+mensaje+".");
-									reply = elemento.ipdistr+" "+elemento.ipmult+" "+elemento.ppet+" "+elemento.pmult;
-									//System.out.println(reply);
-									System.out.println("[Servidor Central] Nombre: "+mensaje+", IP Multicast: "+elemento.ipmult+", Puerto Multicast: "+elemento.pmult+",IP Peticiones: "+elemento.ipdistr+", Puerto Peticiones: "+elemento.ppet);
-									//System.out.println(clientPort);
+									reply = elemento.ipzona+" "+elemento.ipmult+" "+elemento.ppet+" "+elemento.pmult;
+									System.out.println("[Servidor Central] Nombre: "+mensaje+", IP Multicast: "+elemento.ipmult+", Puerto Multicast: "+elemento.pmult+",IP Peticiones: "+elemento.ipzona+", Puerto Peticiones: "+elemento.ppet);
 									data = reply.getBytes("UTF-8");
 									packet = new DatagramPacket(data, data.length, clientAddr, clientPort);
 									socket.send(packet);
-									//input_op = null;
 									break;
 									
 								case "2":
@@ -149,8 +134,6 @@ public class ServidorCentral{
 									data = reply.getBytes("UTF-8");
 									packet = new DatagramPacket(data, data.length, clientAddr, clientPort);
 									socket.send(packet);
-									//menu = new ThreadMenu(distrs);
-									//input_op = null;
 									break;
 								default:
 									System.out.println("[Servidor Central]:Opcion Invalida, se rechazara la conexion.");

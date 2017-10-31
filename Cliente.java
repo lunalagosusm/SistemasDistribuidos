@@ -67,8 +67,7 @@ public class Cliente{
 	@SuppressWarnings("deprecation")
 	public static void main(String args[]) throws UnknownHostException, SocketException{
 		
-		///////////
-	//	String cons=null;
+
 		String[] titandato=null;
 		String mensaje = null;
 		int packetSize = 1024;
@@ -76,23 +75,15 @@ public class Cliente{
 		LinkedList<Titan> lista_capturados = new LinkedList<Titan>();
 		LinkedList<Titan> lista_asesinados = new LinkedList<Titan>();
 		int id;
-		///////////
-		//DatagramSocket socket; // para enviar datos
-		//DatagramPacket packet; // lo que se envia
 
-		//MulticastSocket receptor; // receptor de mensajes multicast
-		//////////////
 		DatagramPacket pack;
 		DatagramSocket sock;
-//		byte[] datt;
 		id = 0;
-		//////////////
 
 		InetAddress address,addr_distrito,addr_mult; // Hacia donde enviar y recibir
 		int p_distr,p_multicast; // puertos de servidor distr y multicast
 		String messageReturn,msgmulti,messageReturnDistrito; // lo que se obtiene del servidor
 		byte[] data = null; // buffer para el mensaje a enviar
-		//byte[] datamult; // buffer para mensaje multicast
 
 		Scanner input = new Scanner(System.in); // datos de entrada del cliente
 
@@ -161,8 +152,6 @@ public class Cliente{
 					escuchar2 = new ThreadDatagramS(p_distr,addr_distrito); 
 					escuchar2.start();
 					resp = messageReturnDistrito;
-					//System.out.println(resp);
-					//System.out.println(resp);
 					String[] titn = resp.split(":");
 					int largo = titn.length-1;
 					if (largo>0){
@@ -170,7 +159,6 @@ public class Cliente{
 						System.out.println("[Cliente] Cantidad de Titanes por capturar en el distrito "+distrito+": "+largo);
 						for (int t=0; t < largo; t++){
 							titandato = titn[t].split(" ");
-							//imprimir
 							int idtitan = Integer.parseInt(titandato[1])+1;
 							System.out.println("*****");
 							System.out.println("Nombre: "+titandato[0]);
@@ -212,7 +200,6 @@ public class Cliente{
 						break;
 					}
 					else{
-						//String[] div = messageReturn.split(" ");
 						div = messageReturn.split(" ");
 						addr_mult = InetAddress.getByName(div[1].trim());
 						addr_distrito = InetAddress.getByName(div[0].trim());
@@ -237,8 +224,6 @@ public class Cliente{
 						pack = new DatagramPacket(dattc, dattc.length, addr_distrito, p_distr);
 						sock = new DatagramSocket();
 						sock.send(pack);
-						//sock.close();
-						//recibir respuesta
 						dattc = new byte[packetSize];
 						pack = new DatagramPacket(dattc, dattc.length);
 						sock.setSoTimeout(1000);
@@ -248,12 +233,7 @@ public class Cliente{
         					System.out.println("ID titan no valido");
         					break;
 						}
-						//dependiendo de la respuesta
-							//si si, agregar a lista local
-							//si no, solo imprimir
 						resp= new String(pack.getData());
-
-
 
 						if (resp.split(" ")[0].equals("Ups!")){
 							System.out.println("[Cliente] "+ resp);
@@ -286,8 +266,6 @@ public class Cliente{
 						pack = new DatagramPacket(dattc, dattc.length, addr_distrito, p_distr);
 						sock = new DatagramSocket();
 						sock.send(pack);
-						//sock.close();
-						//recibir respuesta
 						dattc = new byte[packetSize];
 						pack = new DatagramPacket(dattc, dattc.length);
 						sock.setSoTimeout(1000);
@@ -319,7 +297,6 @@ public class Cliente{
 
 					break;
 				case "5":// LISTAR TITANES CAPTURADOS
-					//recorrer lista local e imprimir
 					if (lista_capturados.size()>0){
 						System.out.println("*****************************************");
 						System.out.println("[Cliente] Titanes actualmente capturados!");
@@ -355,16 +332,10 @@ public class Cliente{
 						System.out.println("[Cliente] No has asesinado a ningun Titan!");
 					}
 					break;
-					//System.out.println("AUN NO IMPLEMENTADO LISTAR TITANES ASESINADOS");
-					//break;
 				default:
 					System.out.println("[SERVIDOR CLIENTE] COMANDO NO RECONOCIDO");
 					break;
 			}
-//efwy2639
-			
 		}
-
 	}
-
 }
