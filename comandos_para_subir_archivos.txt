@@ -4,6 +4,9 @@ ssh pluna@ssh2.inf.utfsm.cl
 
 scp ServidorCentral.java Servidor.java Distrito.java Titan.java Consola.java Cliente.java ThreadMulticast.java ThreadDatagramS.java pluna@ssh2.inf.utfsm.cl:
 
+rm ServidorCentral.java Servidor.java Distrito.java Titan.java Consola.java Cliente.java ThreadMulticast.java ThreadDatagramS.java
+
+
 
 
 scp Cliente.java Titan.java ThreadMulticast.java ThreadDatagramS.java grupo-19@10.10.2.92:
@@ -15,10 +18,10 @@ scp ServidorCentral.java Servidor.java grupo-19@10.10.2.216:
 
 
 ssh grupo-19@10.10.2.92
-mv Cliente.java Titan.java ThreadMulticast.java ThreadDatagramS.java t
+mv Cliente.java Titan.java ThreadMulticast.java ThreadDatagramS.java tarea1-sd-grupo-19/
 
 ssh grupo-19@10.10.2.232
-mv Distrito.java Titan.java Consola.java t
+mv Distrito.java Titan.java Consola.java tarea1-sd-grupo-19/
 
 ssh grupo-19@10.10.2.216
-mv ServidorCentral.java Servidor.java t
+mv ServidorCentral.java Servidor.java tarea1-sd-grupo-19/

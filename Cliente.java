@@ -6,8 +6,8 @@ import java.util.*;
 public class Cliente{
 
 	public String[] titandato;	//varible para operar con los elementos de las listas de titanes
-	public String mensaje;	//variable para la comunicación por soket
-	public int packetSize;	//tamaño de paquetes a enviar
+	public String mensaje;	//variable para la comunicacion por soket
+	public int packetSize;	//tamano de paquetes a enviar
 	public String resp;	//variable para la respuesta por socket
 	public LinkedList<Titan> lista_capturados; //almacena los titanes capturados
 	public LinkedList<Titan> lista_asesinados; //almacena los titanes asesinados
@@ -18,17 +18,17 @@ public class Cliente{
 
 		DatagramSocket socket; // para enviar datos
 		DatagramPacket packet; // lo que se envia
-		InetAddress address; //dirección ip del socket a utilizar
+		InetAddress address; //direccion ip del socket a utilizar
 		byte[] data = null; //variable a enviar en la comunicacion por socket
 		String msgReturn = null; //variable para almacenar la respuesta del socket
 
-		//El siguiente codigo realiza la comunicación
+		//El siguiente codigo realiza la comunicacion
 		try {
 			address = InetAddress.getByName(direccion);
 			socket = new DatagramSocket();
 			data = nombre.getBytes("UTF-8"); // leer mensaje a enviar desde variable distr
 			packet = new DatagramPacket(data, data.length, address, Integer.parseInt(puerto));
-			socket.send(packet); //se envia la información
+			socket.send(packet); //se envia la informacion
 			data = new byte[1024];
 			packet = new DatagramPacket(data, data.length);
 			socket.setSoTimeout(20000);	//si no hay respuesta del socket consultado, a los 20 segundos se retorna un mensaje con "timeout"
@@ -153,7 +153,7 @@ public class Cliente{
 			switch (input.nextLine()){
 				case "1": //LISTAR TITANES DEL DISTRITO
 					mensaje = "LISTAR";
-					//se abre un socket a treaves del siguiente hilo para la comunicación entre cilente y distrito
+					//se abre un socket a treaves del siguiente hilo para la comunicacion entre cilente y distrito
 					ThreadDatagramS escuchar2 = new ThreadDatagramS(p_distr,addr_distrito);
 					escuchar2.start();
 					messageReturnDistrito = consultarDistrito(mensaje,div[0].trim(),div[2].trim());

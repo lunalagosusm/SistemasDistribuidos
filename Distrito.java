@@ -2,7 +2,7 @@ import java.net.*;
 import java.io.*;
 import java.util.*;
 
-//clase que contiene la lógica del servidor de distrito
+//clase que contiene la logica del servidor de distrito
 public class Distrito {
 	private static Scanner sc;
 	public static void main (String[] args) throws IOException {
